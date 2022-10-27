@@ -1,0 +1,4 @@
+include ptrack/schema.sql
+graft ptrack/static
+graft ptrack/templates
+global-exclude *.pyc
