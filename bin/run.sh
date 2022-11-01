@@ -1,6 +1,9 @@
 #!/bin/zsh
 
-flask --app ptrack --debug run
+flask --app ptrack --debug run --host=0.0.0.0
+#flask --app ptrack --debug run --host=0.0.0.0 --port=80
+#[ec2-user@ip-172-31-91-98 ~]$ sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 5000
+
 
 # flask --app ptrack init-db
 
@@ -10,6 +13,7 @@ flask --app ptrack --debug run
 # coverage run -m pytest
 # coverage report
 # coverage html
+# pytest tests/test_item.py -k test_index -s
 
 
 # deactivate

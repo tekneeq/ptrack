@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-  <form method="item">
+  <form method="post">
     <label for="title">Title</label>
     <input name="title" id="title"
       value="{{ request.form['title'] or item['title'] }}" required>
@@ -14,7 +14,7 @@
     <input type="submit" value="Save">
   </form>
   <hr>
-  <form action="{{ url_for('item.delete', id=item['id']) }}" method="item">
+  <form action="{{ url_for('item.delete', id=item['id']) }}" method="post">
     <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
   </form>
 {% endblock %}

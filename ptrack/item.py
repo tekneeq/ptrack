@@ -46,7 +46,7 @@ def create():
 def get_item(id, check_author=True):
     item = get_db().execute(
         'SELECT i.id, title, body, created, user_id, username'
-        ' FROM item i JOIN user u ON p.user_id = u.id'
+        ' FROM item i JOIN user u ON i.user_id = u.id'
         ' WHERE i.id = ?',
         (id,)
     ).fetchone()
