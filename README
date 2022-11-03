@@ -1,9 +1,5 @@
 
-USER
-  ITEM
-
-ITEM
-  date
-  price
+In Prod:
+     - set key in instance/config.py
 
 
