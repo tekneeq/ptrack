@@ -20,6 +20,31 @@ flask --app ptrack --debug run --host=0.0.0.0
 # waitress-serve --call 'ptrack:create_app'
 # [ec2-user@ip-172-31-91-98 ptrack]$ waitress-serve --port 5000 --call 'ptrack:create_app
 
+# sudo systemctl daemon-reload
+# sudo systemctl enable ptrack.service
+# sudo chmod 644 /lib/systemd/system/ptrack.service
+# start a service
+# sudo systemctl start application.service
+# sudo systemctl start application
+
+# stop a service
+# sudo systemctl stop application.service
+
+# restart a service
+# sudo systemctl restart application.service
+
+# reload a service
+# sudo systemctl reload application.service
+
+# enable a service
+# sudo systemctl enable application.service
+
+# disable a service
+#sudo systemctl disable application.service
+
+# get the status log of a service
+#systemctl status application.service
+
 
 # deactivate
 # pwd => /Users/eugenepark/PycharmProjects/ptrack

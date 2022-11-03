@@ -1,0 +1,12 @@
+[Unit]
+Description=Ptrack
+After=network.target
+
+[Service]
+Type=idle
+Restart=on-failure
+User=ec2-user
+ExecStart=/bin/bash -c 'cd /home/ec2-user/ptrack/ && waitress-serve --port 5000 --call 'ptrack:create_app'
+
+[Install]
+WantedBy=multi-user.target
