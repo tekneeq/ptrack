@@ -6,8 +6,7 @@ After=network.target
 Type=idle
 Restart=on-failure
 User=ec2-user
-ExecStart=/bin/bash -c 'cd /home/ec2-user/ptrack/ && waitress-serve --port 5000 --call ptrack:create_app'
-# ExecStart=/bin/bash -c 'cd /home/ec2-user/ptrack/ && flask --app ptrack --debug run --host=0.0.0.0'
+ExecStart=/bin/bash -c 'cd /home/ec2-user/ptrack/ && flask --app ptrack --debug run --host=0.0.0.0'
 
 [Install]
 WantedBy=multi-user.target
