@@ -3,3 +3,5 @@ In Prod:
      - set key in instance/config.py
 
 
+Setup:
+https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/

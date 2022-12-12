@@ -30,6 +30,11 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
+    # a simple page that says hello
+    @app.route('/hidden')
+    def hidden():
+        return 'Hello, Hidden!'
+
     from . import db
     db.init_app(app)
 
