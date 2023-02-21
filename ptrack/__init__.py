@@ -33,7 +33,7 @@ def create_app(test_config=None):
     # a simple page that says hello
     @app.route('/noclip/<wk>', methods=['GET'])
     def hidden(wk):
-        myimg = 'static/1.combined.png'
+        myimg = 'static/2.combined.png'
         if int(wk) == 2:
             myimg = 'static/2.combined.png'
         return render_template("index.html", chart_image=myimg, processed_text='sup')
