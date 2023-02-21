@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, render_template
 
 
 def create_app(test_config=None):
@@ -10,6 +10,8 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'ptrack.sqlite'),
         SECRET_KEY='dev'
     )
+
+    app.config['IMG_DIR'] = os.path.join('images')
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -25,15 +27,13 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+
 
     # a simple page that says hello
-    @app.route('/hidden')
+    @app.route('/noclip')
     def hidden():
-        return 'Hello, Hidden!'
+        full_filename = os.path.join(app.config['UPLOAD_FOLDER'], '1.combined.png')
+        return render_template("index.html", user_image=full_filename)
 
     from . import db
     db.init_app(app)
