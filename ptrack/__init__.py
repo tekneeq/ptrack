@@ -11,7 +11,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev'
     )
 
-    IMG_FOLDER = os.path.join('images')
+    IMG_FOLDER = os.path.join('ptrack', 'images')
     app.config['UPLOAD_FOLDER'] = IMG_FOLDER
 
     if test_config is None:
@@ -34,9 +34,9 @@ def create_app(test_config=None):
     @app.route('/noclip')
     def hidden():
         myimg = os.path.join(app.config['UPLOAD_FOLDER'], '1.combined.png')
-        mytext = 'homie'
+        mytext = 'no homie'
         if os.path.isfile(myimg):
-            mytext = 'nohomie'
+            mytext = 'yes homie'
         return render_template("index.html", user_image=myimg, processed_text=mytext)
 
     from . import db
