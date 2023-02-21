@@ -32,14 +32,15 @@ def create_app(test_config=None):
 
     # a simple page that says hello
     @app.route('/noclip')
-    @app.route('/noclip/<wk>', methods=['GET'])
-    def hidden(wk):
+    #@app.route('/noclip/<wk>', methods=['GET'])
+    def hidden():
+        wk = 1
         myimg = "static/1.combined.png"
         if wk == 2:
             myimg = "static/2.combined.png"
         else:
             myimg = "static/jpuff.png"
-        return render_template("index.html", user_image=myimg, processed_text=wk)
+        return render_template("index.html", user_image="static/jpuff.png", processed_text=wk)
 
     from . import db
     db.init_app(app)
