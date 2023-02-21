@@ -31,13 +31,12 @@ def create_app(test_config=None):
 
 
     # a simple page that says hello
-    @app.route('/noclip')
-    def hidden():
-        myimg = os.path.join(app.config['UPLOAD_FOLDER'], '1.combined.png')
-        mytext = 'no homie'
-        if os.path.isfile(myimg):
-            mytext = 'yes homie'
-        return render_template("index.html", user_image=myimg, processed_text=mytext)
+    @app.route('/noclip/<wk>', methods=['GET'])
+    def hidden(wk):
+        myimg = 'static/1.combined.png'
+        if int(wk) == 2:
+            myimg = 'static/2.combined.png'
+        return render_template("index.html", chart_image=myimg, processed_text='sup')
 
     from . import db
     db.init_app(app)
