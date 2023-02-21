@@ -33,7 +33,7 @@ def create_app(test_config=None):
     @app.route('/noclip')
     def hidden():
         full_filename = os.path.join(app.config['IMG_DIR'], '1.combined.png')
-        return render_template("index.html", user_image=full_filename)
+        return render_template("index.html")
 
     from . import db
     db.init_app(app)
