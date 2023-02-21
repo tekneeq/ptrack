@@ -31,9 +31,13 @@ def create_app(test_config=None):
 
 
     # a simple page that says hello
-    @app.route('/noclip/<wk>', methods=['GET'])
-    def hidden(wk):
-        return render_template("index.html", chart_image='idk', processed_text=wk)
+    @app.route('/noclip')
+    def hidden():
+        myimg = os.path.join(app.config['UPLOAD_FOLDER'], '1.combined.png')
+        mytext = 'no homie'
+        if os.path.isfile(myimg):
+            mytext = 'yes homie'
+        return render_template("index.html", user_image=myimg, processed_text=mytext)
 
     from . import db
     db.init_app(app)
