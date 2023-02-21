@@ -34,7 +34,10 @@ def create_app(test_config=None):
     @app.route('/noclip')
     def hidden():
         myimg = os.path.join(app.config['UPLOAD_FOLDER'], '1.combined.png')
-        return render_template("index.html", user_image=myimg, processed_text=os.path.isfile(myimg))
+        mytext = 'homie'
+        if os.path.isfile(myimg):
+            mytext = 'nohomie'
+        return render_template("index.html", user_image=myimg, processed_text=mytext)
 
     from . import db
     db.init_app(app)
