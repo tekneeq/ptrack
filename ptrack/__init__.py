@@ -11,7 +11,8 @@ def create_app(test_config=None):
         SECRET_KEY='dev'
     )
 
-    app.config['IMG_DIR'] = os.path.join('images')
+    IMG_FOLDER = os.path.join('images')
+    app.config['UPLOAD_FOLDER'] = IMG_FOLDER
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -32,8 +33,8 @@ def create_app(test_config=None):
     # a simple page that says hello
     @app.route('/noclip')
     def hidden():
-        full_filename = os.path.join(app.config['IMG_DIR'], '1.combined.png')
-        return render_template("index.html")
+        myimg = os.path.join(app.config['UPLOAD_FOLDER'], '1.combined.png')
+        return render_template("index.html", user_image=myimg)
 
     from . import db
     db.init_app(app)
