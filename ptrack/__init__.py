@@ -37,7 +37,7 @@ def create_app(test_config=None):
         mytext = 'no homie'
         if os.path.isfile(myimg):
             mytext = 'yes homie'
-        return render_template("index.html", user_image=myimg, processed_text=mytext)
+        return render_template("index.html", user_image="static/1.combined.png", processed_text=mytext)
 
     from . import db
     db.init_app(app)
