@@ -36,7 +36,7 @@ def create_app(test_config=None):
         return render_template("index.html", user_image="static/1.combined.png", processed_text='hi')
 
     @app.route('/noclip2')
-    def hidden():
+    def noclip():
         return render_template("index.html", user_image="static/2.combined.png", processed_text='hi')
 
     from . import db
