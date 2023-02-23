@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, render_template
+import datetime
 
 
 def create_app(test_config=None):
@@ -33,11 +34,19 @@ def create_app(test_config=None):
     # a simple page that says hello
     @app.route('/noclip')
     def hidden():
-        return render_template("index.html", user_image="static/1.combined.png", processed_text='hi')
+        return render_template("index.html", user_image="static/1.combined.png", processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
 
     @app.route('/noclip2')
     def noclip():
-        return render_template("index.html", user_image="static/2.combined.png", processed_text='hi')
+        return render_template("index.html", user_image="static/2.combined.png", processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
+
+    @app.route('/noclip3')
+    def noclip():
+        return render_template("index.html", user_image="static/3.combined.png", processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
+
+    @app.route('/noclip4')
+    def noclip():
+        return render_template("index.html", user_image="static/4.combined.png", processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
 
     from . import db
     db.init_app(app)
