@@ -41,11 +41,11 @@ def create_app(test_config=None):
         return render_template("index.html", user_image="static/2.combined.png", processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
 
     @app.route('/noclip3')
-    def noclip():
+    def noclip3():
         return render_template("index.html", user_image="static/3.combined.png", processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
 
     @app.route('/noclip4')
-    def noclip():
+    def noclip4():
         return render_template("index.html", user_image="static/4.combined.png", processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
 
     from . import db
