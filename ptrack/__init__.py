@@ -54,17 +54,19 @@ def create_app(test_config=None):
     def mongo():
         import pymongo
 
-        client = MongoClient(host="127.0.0.1",
+        client = MongoClient(host=app.config['HOST'],
                              port=27017,
-                             username=app.config['user'],
-                             password=app.config['password'],
+                             username=app.config['USER'],
+                             password=app.config['PASSWORD'],
                              tls=True,
                              tlsAllowInvalidCertificates=True,
-                             tlsCAFile='rds-combined-ca-bundle.pem',
+                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
                              )
+        db = client.vesto
+        col = db.list_collection_names()
 
         return render_template("index.html", user_image="static/jpuff.png",
-                               processed_text='yo')
+                               processed_text=col)
 
 
     from . import db
