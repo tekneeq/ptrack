@@ -65,8 +65,11 @@ def create_app(test_config=None):
         db = client.vesto
         col = db.list_collection_names()
 
-        data = json.loads(request.data)
-
+        data = "No data"
+        try:
+            data = json.loads(request.data)
+        except:
+            pass
 
         return render_template("index.html", user_image="static/jpuff.png",
                                processed_text=data)
