@@ -5,3 +5,7 @@ In Prod:
 
 Setup:
 https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/
+
+
+
+python3 -m pip install -r requirements.txt
