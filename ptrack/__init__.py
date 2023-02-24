@@ -3,6 +3,8 @@ import os
 from flask import Flask, render_template
 import datetime
 
+from pymongo import MongoClient
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -51,6 +53,18 @@ def create_app(test_config=None):
     @app.route('/mongo')
     def mongo():
         import pymongo
+
+        client = MongoClient(host="127.0.0.1",
+                             port=27017,
+                             username=app.config['user'],
+                             password=app.config['password'],
+                             tls=True,
+                             tlsAllowInvalidCertificates=True,
+                             tlsCAFile='rds-combined-ca-bundle.pem',
+                             )
+
+        return render_template("index.html", user_image="static/jpuff.png",
+                               processed_text='yo')
 
 
     from . import db
