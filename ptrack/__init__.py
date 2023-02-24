@@ -48,6 +48,11 @@ def create_app(test_config=None):
     def noclip4():
         return render_template("index.html", user_image="static/4.combined.png", processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
 
+    @app.route('/mongo')
+    def mongo():
+        import pymongo
+
+
     from . import db
     db.init_app(app)
 
