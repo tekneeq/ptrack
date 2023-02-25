@@ -9,7 +9,8 @@ from pymongo import MongoClient
 
 def create_app(test_config=None):
     # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, static_url_path='',
+                static_folder='static')
     app.config.from_mapping(
         DATABASE=os.path.join(app.instance_path, 'ptrack.sqlite'),
         SECRET_KEY='dev'
@@ -32,24 +33,26 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-
-
     # a simple page that says hello
     @app.route('/noclip')
     def hidden():
-        return render_template("index.html", user_image="static/1.combined.png", processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
+        return render_template("index.html", user_image="static/1.combined.png",
+                               processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
 
     @app.route('/noclip2')
     def noclip():
-        return render_template("index.html", user_image="static/2.combined.png", processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
+        return render_template("index.html", user_image="static/2.combined.png",
+                               processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
 
     @app.route('/noclip3')
     def noclip3():
-        return render_template("index.html", user_image="static/3.combined.png", processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
+        return render_template("index.html", user_image="static/3.combined.png",
+                               processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
 
     @app.route('/noclip4')
     def noclip4():
-        return render_template("index.html", user_image="static/4.combined.png", processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
+        return render_template("index.html", user_image="static/4.combined.png",
+                               processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
 
     @app.route('/progress')
     def progress():
@@ -100,7 +103,6 @@ def create_app(test_config=None):
 
         return render_template("index.html", user_image="static/jpuff.png",
                                processed_text=inserted_id)
-
 
     from . import db
     db.init_app(app)
