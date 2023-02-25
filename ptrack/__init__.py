@@ -63,16 +63,30 @@ def create_app(test_config=None):
                              tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
                              )
         db = client.vesto
-        col = db.list_collection_names()
+        vesto_col = db.vesto
 
+        # curl -X POST -H "Content-type: application/json" -d "{\"firstName\" : \"Jo"lastName\" : \"Smith\"}" http://ptrackit.com/mongo
         data = "No data"
         try:
             data = json.loads(request.data)
+
+            intersection = data['intersection']
+            ptop = data['ptop']
+            pbot = data['pbot']
+
+            ctop = data['ctop']
+            cbot = data['cbot']
+
+            data_date = datetime.datetime.strptime(data['data_date'], '%Y-%m-%dT%H:%M:%S').date()
+            version = data['version']
+
+            inserted_id = vesto_col.insert_one(data).inserted_id
+
         except:
             pass
 
         return render_template("index.html", user_image="static/jpuff.png",
-                               processed_text=data)
+                               processed_text=inserted_id)
 
 
     from . import db
