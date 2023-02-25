@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+{% block scripts %}
+    {{  super() }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% block app_scripts %}{% endblock %}
+{% endblock %}
+
+<div class="row">
+    <div class="col-md-4"><!-- form/results will go here --></div>
+    <div class="col-md-8">
+        <h1>Visualize Class Meanscore</h1>
+        <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+</div>
+
+<script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+{% block app_scripts %}
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for term in terms %}
+                        'Term {{ term }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Math',
+                    data: [
+                        {% for math_score in math %}
+                            {{ math_score }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: ['white'],
+                    borderColor: ['teal'],
+                    borderWidth: 1
+                }, {
+                    label: 'English',
+                    data: [
+                        {% for english_score in english %}
+                            {{ english_score }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: ['purple'],
+                    borderColor: ['red'],
+                }, {
+                    label: 'Science',
+                    data: [
+                        {% for science_score in science %}
+                            {{ science_score }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: ['black'],
+                    borderColor: ['cyan'],
+                }, {
+                    label: 'ICT',
+                    data: [
+                        {% for ict_score in ict %}
+                            {{ ict_score }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: ['orange'],
+                    borderColor: ['pink'],
+                }, {
+                    label: 'History',
+                    data: [
+                        {% for history_score in history %}
+                            {{ history_score }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: ['green'],
+                    borderColor: ['yellow'],
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+{% endblock %}
+
+</html>

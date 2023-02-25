@@ -10,6 +10,14 @@ from pymongo import MongoClient
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+
+    """
+    app = flask.Flask(__name__, static_url_path='',
+                      static_folder='static',
+                      template_folder='template')
+    """
+
+
     app.config.from_mapping(
         DATABASE=os.path.join(app.instance_path, 'ptrack.sqlite'),
         SECRET_KEY='dev'
@@ -64,6 +72,11 @@ def create_app(test_config=None):
                 time.sleep(0.5)
 
         return Response(generate(), mimetype='text/event-stream')
+
+
+    @app.route('/chart')
+    def chart():
+        return render_template("chartme.html",  data="hello")
 
     @app.route('/mongo', methods=['GET', 'POST'])
     def mongo():
