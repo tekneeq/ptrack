@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 
 {% block scripts %}
-    {{  super() }}
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     {% block app_scripts %}
     <script>
         var ctx = document.getElementById('myChart').getContext('2d');
