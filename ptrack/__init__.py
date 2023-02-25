@@ -1,6 +1,7 @@
 import os
 
-from flask import Flask, render_template, request, json
+from flask import Flask, render_template, request, json, Response
+import time
 import datetime
 
 from pymongo import MongoClient
@@ -49,6 +50,18 @@ def create_app(test_config=None):
     @app.route('/noclip4')
     def noclip4():
         return render_template("index.html", user_image="static/4.combined.png", processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
+
+    @app.route('/progress')
+    def progress():
+        def generate():
+            x = 0
+
+            while x <= 100:
+                yield "data:" + str(x) + "\n\n"
+                x = x + 10
+                time.sleep(0.5)
+
+        return Response(generate(), mimetype='text/event-stream')
 
     @app.route('/mongo', methods=['GET', 'POST'])
     def mongo():

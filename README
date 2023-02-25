@@ -9,3 +9,9 @@ https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/
 
 
 python3 -m pip install -r requirements.txt
+
+
+https://nodejs.org/en/download/
+with above you can call npm
+
+npm install -g npx
