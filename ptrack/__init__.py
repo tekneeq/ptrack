@@ -156,6 +156,34 @@ def create_app(test_config=None):
         return render_template("index.html", user_image="static/jpuff.png",
                                processed_text=docs)
 
+
+    @app.route('/mongo_opts', methods=['GET', 'POST'])
+    def mongo_opts():
+        import pymongo
+
+        client = MongoClient(host=app.config['HOST'],
+                             port=27017,
+                             username=app.config['USER'],
+                             password=app.config['PASSWORD'],
+                             tls=True,
+                             tlsAllowInvalidCertificates=True,
+                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
+                             )
+        db = client.vesto
+        opts_col = db.opts
+
+        inserted_id = -1
+        try:
+            data = json.loads(request.data)
+
+            inserted_id = opts_col.insert_one(data).inserted_id
+
+        except Exception as e:
+            pass
+
+        return render_template("index.html", user_image="static/jpuff.png",
+                               processed_text=inserted_id)
+
     from . import db
     db.init_app(app)
 
