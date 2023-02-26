@@ -137,7 +137,7 @@ def create_app(test_config=None):
             data = json.loads(request.data)
 
 
-            data_date = datetime.datetime.strptime(data['data_date'], '%Y-%m-%d').date()
+            #data_date = datetime.datetime.strptime(data['data_date'], '%Y-%m-%d').date()
 
 
             # inserted_id = vesto_col.insert_one(data).inserted_id
@@ -145,7 +145,6 @@ def create_app(test_config=None):
             #docs = list(vesto_col.find({"date": {"$lt": data_date}}))
 
             docs = vesto_col.find({"version": 1}).count()
-            docs = 10
 
             #doc_list = []
             #for doc in docs:
@@ -154,7 +153,7 @@ def create_app(test_config=None):
             pass
 
         return render_template("index.html", user_image="static/jpuff.png",
-                               processed_text=100)
+                               processed_text=docs)
 
     from . import db
     db.init_app(app)
