@@ -135,12 +135,13 @@ def create_app(test_config=None):
         try:
             data = json.loads(request.data)
 
-            tz = timezone('EST')
-            target_date = data.get('data_date', datetime.now(tz).strftime('%Y-%m-%dT%H:%M:%S'))
+
+            data_date = datetime.datetime.strptime(data['data_date'], '%Y-%m-%d').date()
+
 
             # inserted_id = vesto_col.insert_one(data).inserted_id
 
-            docs = vesto_col.find({"date": {"$lt": target_date}, 'version': 1})
+            docs = vesto_col.find({"date": {"$lt": data_date}, 'version': 1})
 
         except:
             pass
