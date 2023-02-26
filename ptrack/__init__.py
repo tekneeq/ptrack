@@ -5,6 +5,7 @@ import time
 import datetime
 
 from pymongo import MongoClient
+from datetime import timezone
 
 
 def create_app(test_config=None):
@@ -115,6 +116,41 @@ def create_app(test_config=None):
 
         return render_template("index.html", user_image="static/jpuff.png",
                                processed_text=inserted_id)
+
+
+    @app.route('/mongo_delete', methods=['GET', 'POST'])
+    def mongo():
+        import pymongo
+
+        client = MongoClient(host=app.config['HOST'],
+                             port=27017,
+                             username=app.config['USER'],
+                             password=app.config['PASSWORD'],
+                             tls=True,
+                             tlsAllowInvalidCertificates=True,
+                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
+                             )
+        db = client.vesto
+        vesto_col = db.vesto
+
+        # curl -X POST -H "Content-type: application/json" -d "{\"firstName\" : \"Jo"lastName\" : \"Smith\"}" http://ptrackit.com/mongo
+        data = "No data"
+        try:
+            data = json.loads(request.data)
+
+            tz = timezone('EST')
+            target_date = data.get('data_date', datetime.now(tz).strftime('%Y-%m-%dT%H:%M:%S'))
+
+            #inserted_id = vesto_col.insert_one(data).inserted_id
+
+            docs = vesto_col.find({"date": {"$lt": target_date}})
+
+        except:
+            pass
+
+        return render_template("index.html", user_image="static/jpuff.png",
+                               processed_text=docs)
+
 
     from . import db
     db.init_app(app)
