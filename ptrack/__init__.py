@@ -143,11 +143,14 @@ def create_app(test_config=None):
 
             docs = vesto_col.find({"date": {"$lt": data_date}, 'version': 1})
 
+            doc_list = []
+            for doc in docs:
+                doc_list.append(doc)
         except:
             pass
 
         return render_template("index.html", user_image="static/jpuff.png",
-                               processed_text=docs)
+                               processed_text=doc_list)
 
     from . import db
     db.init_app(app)
