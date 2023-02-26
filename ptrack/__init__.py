@@ -132,6 +132,7 @@ def create_app(test_config=None):
 
         # curl -X POST -H "Content-type: application/json" -d "{\"firstName\" : \"Jo"lastName\" : \"Smith\"}" http://ptrackit.com/mongo
         data = "No data"
+        docs = -1
         try:
             data = json.loads(request.data)
 
