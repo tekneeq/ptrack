@@ -149,8 +149,8 @@ def create_app(test_config=None):
             #doc_list = []
             #for doc in docs:
             #    doc_list.append(doc)
-        except:
-            docs = 1000
+        except Exception as e:
+            docs = e
 
         return render_template("index.html", user_image="static/jpuff.png",
                                processed_text=docs)
