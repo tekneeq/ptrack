@@ -144,7 +144,7 @@ def create_app(test_config=None):
 
             docs = list(vesto_col.find({"date": {"$lt": data_date}}))
 
-            docs = list(vesto_col.find({"version":1}))
+            docs = vesto_col.find({"version":1}).count()
 
             #doc_list = []
             #for doc in docs:
