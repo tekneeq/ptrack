@@ -150,7 +150,7 @@ def create_app(test_config=None):
             #for doc in docs:
             #    doc_list.append(doc)
         except:
-            pass
+            docs = 1000
 
         return render_template("index.html", user_image="static/jpuff.png",
                                processed_text=docs)
