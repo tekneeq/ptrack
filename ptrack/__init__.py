@@ -154,7 +154,7 @@ def create_app(test_config=None):
             pass
 
         return render_template("index.html", user_image="static/jpuff.png",
-                               processed_text=docs)
+                               processed_text=100)
 
     from . import db
     db.init_app(app)
