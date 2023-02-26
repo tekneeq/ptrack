@@ -141,16 +141,16 @@ def create_app(test_config=None):
 
             # inserted_id = vesto_col.insert_one(data).inserted_id
 
-            docs = vesto_col.find({"date": {"$lt": data_date}, 'version': 1})
+            docs = vesto_col.find({"date": {"$lt": data_date}, 'version': 1}).count()
 
-            doc_list = []
-            for doc in docs:
-                doc_list.append(doc)
+            #doc_list = []
+            #for doc in docs:
+            #    doc_list.append(doc)
         except:
             pass
 
         return render_template("index.html", user_image="static/jpuff.png",
-                               processed_text=doc_list)
+                               processed_text=docs)
 
     from . import db
     db.init_app(app)
