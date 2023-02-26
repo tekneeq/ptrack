@@ -18,7 +18,6 @@ def create_app(test_config=None):
                       template_folder='template')
     """
 
-
     app.config.from_mapping(
         DATABASE=os.path.join(app.instance_path, 'ptrack.sqlite'),
         SECRET_KEY='dev'
@@ -74,10 +73,9 @@ def create_app(test_config=None):
 
         return Response(generate(), mimetype='text/event-stream')
 
-
     @app.route('/chart')
     def chart():
-        return render_template("chartme.html",  data="hello")
+        return render_template("chartme.html", data="hello")
 
     @app.route('/mongo', methods=['GET', 'POST'])
     def mongo():
@@ -117,9 +115,8 @@ def create_app(test_config=None):
         return render_template("index.html", user_image="static/jpuff.png",
                                processed_text=inserted_id)
 
-
     @app.route('/mongo_delete', methods=['GET', 'POST'])
-    def mongo():
+    def mongo_delete():
         import pymongo
 
         client = MongoClient(host=app.config['HOST'],
@@ -141,16 +138,15 @@ def create_app(test_config=None):
             tz = timezone('EST')
             target_date = data.get('data_date', datetime.now(tz).strftime('%Y-%m-%dT%H:%M:%S'))
 
-            #inserted_id = vesto_col.insert_one(data).inserted_id
+            # inserted_id = vesto_col.insert_one(data).inserted_id
 
-            docs = vesto_col.find({"date": {"$lt": target_date}})
+            docs = vesto_col.find({"date": {"$lt": target_date}, 'version': 1})
 
         except:
             pass
 
         return render_template("index.html", user_image="static/jpuff.png",
                                processed_text=docs)
-
 
     from . import db
     db.init_app(app)
