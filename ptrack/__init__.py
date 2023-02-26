@@ -137,8 +137,9 @@ def create_app(test_config=None):
             data = json.loads(request.data)
 
 
-            data_date = datetime.datetime.strptime(data['data_date'], '%Y-%m-%d').date()
-
+            #data_date = datetime.datetime.strptime(data['data_date'], '%Y-%m-%d').date()
+            tz = timezone('EST')
+            data_date = datetime.datetime.now(tz).strftime('%Y-%m-%dT%H:%M:%S')
 
             # inserted_id = vesto_col.insert_one(data).inserted_id
 
