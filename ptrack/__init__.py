@@ -137,14 +137,14 @@ def create_app(test_config=None):
             data = json.loads(request.data)
 
 
-            #data_date = datetime.datetime.strptime(data['data_date'], '%Y-%m-%d').date()
+            data_date = datetime.datetime.strptime(data['data_date'], '%Y-%m-%d').date()
 
 
             # inserted_id = vesto_col.insert_one(data).inserted_id
 
-            #docs = list(vesto_col.find({"date": {"$lt": data_date}}))
+            docs = list(vesto_col.find({"date": {"$lt": data_date}}))
 
-            docs = list(vesto_col.find({"version": 1}))
+            #docs = list(vesto_col.find({"version": 1}))
 
             #doc_list = []
             #for doc in docs:
