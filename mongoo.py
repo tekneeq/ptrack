@@ -3,7 +3,7 @@ import instance.config as Config
 import pymongo
 from pymongo import MongoClient
 
-client = MongoClient(host=Config.host,
+client = MongoClient(host=Config.HOST,
                      port=27017,
                      username=Config.USER,
                      password=Config.PASSWORD,
