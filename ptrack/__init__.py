@@ -202,17 +202,18 @@ def create_app(test_config=None):
         # expdate = datetime.datetime.now(tz).strftime('%Y-%m-%d')
         data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.ASCENDING)
 
-        legend = 'Temperatures'
-        temperatures = []
+        legend = 'isect / ctop / ptop'
+        isect = []
         times = []
+        ctop = []
+        ptop = []
         for d in data:
             times.append(d['data_date'])
-            temperatures.append(d['intersection'][0])
+            isect.append(d['intersection'][0])
+            ctop.append(d['ctop'][1])
+            ptop.append(d['ptop'][1])
 
-            # d['intersection'][0]
-            # d['ctop'][1]
-
-        return render_template('line_chart.html', values=temperatures, labels=times, legend=legend)
+        return render_template('line_chart.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times, legend=legend)
 
     from . import db
     db.init_app(app)
