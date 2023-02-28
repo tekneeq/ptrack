@@ -60,7 +60,7 @@ def get_slope(x1, y1, x2, y2):
 
 expdate = args.expdate
 print(f'Grabbing isect, ptop, ctop for {expdate}')
-data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.DESCENDING)
+data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.ASCENDING)
 
 """
 {
@@ -75,11 +75,15 @@ data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.DESC
     "version": 1,
 }
 """
+
+cnt = 0
 for d in data:
+    cnt += 1
     newdict = {}
     newdict['isect'] = d['intersection'][0]
     newdict['ctop'] = d['ctop'][1]
     newdict['ptop'] = d['ptop'][1]
+    newdict['cnt'] = cnt
     newdict['date_collected'] = d['data_date']
 
     pp.pprint(newdict)
