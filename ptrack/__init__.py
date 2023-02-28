@@ -232,6 +232,7 @@ def create_app(test_config=None):
         expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
 
         # expdate = datetime.datetime.now(tz).strftime('%Y-%m-%d')
+        expdate = '2023-03-01'
         data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.ASCENDING)
 
         legend = 'isect / ctop / ptop'
