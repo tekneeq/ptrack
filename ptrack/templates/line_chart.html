@@ -10,6 +10,7 @@
     <h1>isect / ctop / ptop</h1>
     <!-- bar chart canvas element -->
     <canvas id="myChart" width="600" height="400"></canvas>
+    <canvas id="myChart2" width="600" height="400"></canvas>
     <p id="pointSelected">Point selected:</p>
 
     <script>
@@ -45,7 +46,13 @@
                       {{item}},
                     {% endfor %}],
             spanGaps: false
-        },
+        }]
+      }
+
+      var chartData2 = {
+        labels : [{% for item in labels %}
+                   "{{item}}",
+                  {% endfor %}],
         {
             label: 'ctop',
             fill: true,
@@ -98,6 +105,7 @@
         ]
       }
 
+
       // get chart canvas
       var holder = document.getElementById("myChart");
       var ctx = document.getElementById("myChart").getContext("2d");
@@ -119,6 +127,29 @@
         }
       });
 
+
+      var holder2 = document.getElementById("myChart2");
+      var ctx2 = document.getElementById("myChart2").getContext("2d");
+      var myChart2 = new Chart(ctx2, {
+        type: 'line',
+        data: chartData2,
+        options: {
+          tooltips: {
+            enabled: true,
+            mode: 'single',
+            callbacks: {
+              label: function(tooltipItems, data) {
+                       return tooltipItems.yLabel + ' degrees';
+                     }
+            }
+          },
+        }
+      });
+
+
+
+
+
       // get the text element below the chart
       var pointSelected = document.getElementById("pointSelected");
 
@@ -132,6 +163,18 @@
         console.log('index: ' + activePoint[0]._index);
         pointSelected.innerHTML = 'Point selected... index: ' + activePoint[0]._index;
       };
+
+
+      holder2.onclick = function(evt){
+        var activePoint = myChart2.getElementAtEvent(evt);
+        console.log(activePoint);
+        console.log('x:' + activePoint[0]._view.x);
+        console.log('maxWidth: ' + activePoint[0]._xScale.maxWidth);
+        console.log('y: ' + activePoint[0]._view.y);
+        console.log('index: ' + activePoint[0]._index);
+        pointSelected.innerHTML = 'Point selected... index: ' + activePoint[0]._index;
+      };
+
     </script>
 
   </body>
