@@ -197,7 +197,7 @@ def create_app(test_config=None):
         db = client.vesto
         vesto_col = db.vesto
 
-        expdate = datetime.datetime.now(timezone(datetime.datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
+        expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
 
         # expdate = datetime.datetime.now(tz).strftime('%Y-%m-%d')
         data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.ASCENDING)
