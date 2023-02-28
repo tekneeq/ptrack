@@ -25,7 +25,7 @@ def get_slope (x1, y1, x2, y2):
 
 expdate = '2023-02-28'
 print(f'Grabbing isect, ptop, ctop for {expdate}')
-data = vesto_col.find({f'exp_date: {expdate}'})
+data = vesto_col.find({'exp_date': f'{expdate}'})
 
 for d in data:
     print(d)
