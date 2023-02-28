@@ -137,26 +137,24 @@ def create_app(test_config=None):
         try:
             data = json.loads(request.data)
 
-
-            #data_date = datetime.datetime.strptime(data['data_date'], '%Y-%m-%d').date()
-            #tz = timezone('EST')
+            # data_date = datetime.datetime.strptime(data['data_date'], '%Y-%m-%d').date()
+            # tz = timezone('EST')
             data_date = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
 
             # inserted_id = vesto_col.insert_one(data).inserted_id
 
             docs = list(vesto_col.find({"data_date": {"$lt": data_date}}))
 
-            #docs = list(vesto_col.find({"version": 1}))
+            # docs = list(vesto_col.find({"version": 1}))
 
-            #doc_list = []
-            #for doc in docs:
+            # doc_list = []
+            # for doc in docs:
             #    doc_list.append(doc)
         except Exception as e:
             docs = e
 
         return render_template("index.html", user_image="static/jpuff.png",
                                processed_text=docs)
-
 
     @app.route('/mongo_opts', methods=['GET', 'POST'])
     def mongo_opts():
@@ -199,10 +197,9 @@ def create_app(test_config=None):
         db = client.vesto
         vesto_col = db.vesto
 
+        expdate = datetime.datetime.now(timezone(datetime.datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
 
-        expdate = datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
-
-        #expdate = datetime.datetime.now(tz).strftime('%Y-%m-%d')
+        # expdate = datetime.datetime.now(tz).strftime('%Y-%m-%d')
         data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.ASCENDING)
 
         legend = 'Temperatures'
@@ -212,8 +209,8 @@ def create_app(test_config=None):
             times.append(d['data_date'])
             temperatures.append(d['intersection'][0])
 
-            #d['intersection'][0]
-            #d['ctop'][1]
+            # d['intersection'][0]
+            # d['ctop'][1]
 
         return render_template('line_chart.html', values=temperatures, labels=times, legend=legend)
 
