@@ -41,7 +41,7 @@
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data : [{% for item in values_calls %}
+            data : [{% for item in values_ctop %}
                       {{item}},
                     {% endfor %}],
             spanGaps: false
@@ -65,7 +65,7 @@
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data : [{% for item in values_puts %}
+            data : [{% for item in values_ptop %}
                       {{item}},
                     {% endfor %}],
             spanGaps: false
