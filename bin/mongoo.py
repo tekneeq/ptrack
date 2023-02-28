@@ -1,4 +1,4 @@
-import .instance.config as Config
+import instance.config as Config
 
 import pymongo
 from pymongo import MongoClient
