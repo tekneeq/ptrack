@@ -1,5 +1,6 @@
 import os
 
+import pymongo
 from flask import Flask, render_template, request, json, Response
 import time
 import datetime
@@ -186,13 +187,32 @@ def create_app(test_config=None):
 
     @app.route("/line_chart")
     def line_chart():
+
+        client = MongoClient(host=app.config['HOST'],
+                             port=27017,
+                             username=app.config['USER'],
+                             password=app.config['PASSWORD'],
+                             tls=True,
+                             tlsAllowInvalidCertificates=True,
+                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
+                             )
+        db = client.vesto
+        vesto_col = db.vesto
+
+        tz = timezone('EST')
+        expdate = datetime.datetime.now(tz).strftime('%Y-%m-%d')
+        data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.ASCENDING)
+
         legend = 'Temperatures'
-        temperatures = [73.7, 73.4, 73.8, 72.8, 68.7, 65.2,
-                        61.8, 58.7, 58.2, 58.3, 60.5, 65.7,
-                        70.2, 71.4, 71.2, 70.9, 71.3, 71.1]
-        times = ['12:00PM', '12:10PM', '12:20PM', '12:30PM', '12:40PM', '12:50PM',
-                 '1:00PM', '1:10PM', '1:20PM', '1:30PM', '1:40PM', '1:50PM',
-                 '2:00PM', '2:10PM', '2:20PM', '2:30PM', '2:40PM', '2:50PM']
+        temperatures = []
+        times = []
+        for d in data:
+            times.append(d['data_date'])
+            temperatures.append(d['intersection'][0])
+
+            #d['intersection'][0]
+            #d['ctop'][1]
+
         return render_template('line_chart.html', values=temperatures, labels=times, legend=legend)
 
     from . import db
