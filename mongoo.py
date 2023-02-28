@@ -81,3 +81,5 @@ for d in data:
     newdict['ctop'] = d['ctop'][1]
     newdict['ptop'] = d['ptop'][1]
     newdict['date_collected'] = d['data_date']
+
+    pp.pprint(newdict)
