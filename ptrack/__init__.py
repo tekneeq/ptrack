@@ -183,9 +183,8 @@ def create_app(test_config=None):
         return render_template("index.html", user_image="static/jpuff.png",
                                processed_text=inserted_id)
 
-    @app.route('/line_chart')
-    @app.route('/line_chart/<mydate>', methods=['GET', 'POST'])
-    def line_chart(mydate=datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')):
+    @app.route('/lc')
+    def lc():
 
         client = MongoClient(host=app.config['HOST'],
                              port=27017,
@@ -198,11 +197,8 @@ def create_app(test_config=None):
         db = client.vesto
         vesto_col = db.vesto
 
-        #mydate = datetime.datetime.strptime(mydate, '%Y-%m-%d').date()
-        mydate = '2023-03-01'
+        mydate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
 
-        # expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
-        # expdate = datetime.datetime.now(tz).strftime('%Y-%m-%d')
         data = vesto_col.find({'exp_date': f'{mydate}'}).sort('data_date', pymongo.ASCENDING)
 
         legend = 'isect for %s' % mydate
@@ -218,10 +214,11 @@ def create_app(test_config=None):
 
         mystr = f'{len(times)}, {len(isect)}, {len(ctop)}, {len(ptop)}'
 
-        return render_template('line_chart.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times, legend=legend, processed_text=mystr)
+        return render_template('line_chart.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times,
+                               legend=legend, processed_text=mystr)
 
-    @app.route("/line_chart_two")
-    def line_chart_two():
+    @app.route("/lcc")
+    def lcc():
 
         client = MongoClient(host=app.config['HOST'],
                              port=27017,
@@ -234,10 +231,9 @@ def create_app(test_config=None):
         db = client.vesto
         vesto_col = db.vesto
 
-        expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
-
-        # expdate = datetime.datetime.now(tz).strftime('%Y-%m-%d')
-        expdate = '2023-03-01'
+        expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST'))
+        expdate = expdate + datetime.timedelta(1)
+        expdate = expdate.strftime('%Y-%m-%d')
         data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.ASCENDING)
 
         legend = 'ctop / ptop for %s' % expdate
@@ -251,7 +247,75 @@ def create_app(test_config=None):
             ctop.append(d['ctop'][1])
             ptop.append(d['ptop'][1])
 
-        return render_template('line_chart_two.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times, legend=legend)
+        return render_template('line_chart_two.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times,
+                               legend=legend)
+
+    @app.route('/lc2')
+    def lc2():
+
+        client = MongoClient(host=app.config['HOST'],
+                             port=27017,
+                             username=app.config['USER'],
+                             password=app.config['PASSWORD'],
+                             tls=True,
+                             tlsAllowInvalidCertificates=True,
+                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
+                             )
+        db = client.vesto
+        vesto_col = db.vesto
+
+        mydate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST'))
+        mydate = mydate + datetime.timedelta(1)
+        mydate = mydate.strftime('%Y-%m-%d')
+
+        data = vesto_col.find({'exp_date': f'{mydate}'}).sort('data_date', pymongo.ASCENDING)
+
+        legend = 'isect for %s' % mydate
+        isect = []
+        times = []
+        ctop = []
+        ptop = []
+        for d in data:
+            times.append(d['data_date'])
+            isect.append(d['intersection'][0])
+            ctop.append(d['ctop'][1])
+            ptop.append(d['ptop'][1])
+
+        mystr = f'{len(times)}, {len(isect)}, {len(ctop)}, {len(ptop)}'
+
+        return render_template('line_chart.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times,
+                               legend=legend, processed_text=mystr)
+
+    @app.route("/lcc2")
+    def lcc2():
+
+        client = MongoClient(host=app.config['HOST'],
+                             port=27017,
+                             username=app.config['USER'],
+                             password=app.config['PASSWORD'],
+                             tls=True,
+                             tlsAllowInvalidCertificates=True,
+                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
+                             )
+        db = client.vesto
+        vesto_col = db.vesto
+
+        expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
+        data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.ASCENDING)
+
+        legend = 'ctop / ptop for %s' % expdate
+        isect = []
+        times = []
+        ctop = []
+        ptop = []
+        for d in data:
+            times.append(d['data_date'])
+            isect.append(d['intersection'][0])
+            ctop.append(d['ctop'][1])
+            ptop.append(d['ptop'][1])
+
+        return render_template('line_chart_two.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times,
+                               legend=legend)
 
     from . import db
     db.init_app(app)
