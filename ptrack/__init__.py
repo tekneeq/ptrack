@@ -183,8 +183,9 @@ def create_app(test_config=None):
         return render_template("index.html", user_image="static/jpuff.png",
                                processed_text=inserted_id)
 
-    @app.route("/line_chart")
-    def line_chart():
+    @app.route('/line_chart', defaults={'mydate': datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')})
+    @app.route('/line_chart/<mydate>')
+    def line_chart(mydate):
 
         client = MongoClient(host=app.config['HOST'],
                              port=27017,
@@ -197,12 +198,11 @@ def create_app(test_config=None):
         db = client.vesto
         vesto_col = db.vesto
 
-        expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
-
+        # expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
         # expdate = datetime.datetime.now(tz).strftime('%Y-%m-%d')
-        data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.ASCENDING)
+        data = vesto_col.find({'exp_date': f'{mydate}'}).sort('data_date', pymongo.ASCENDING)
 
-        legend = 'isect / ctop / ptop'
+        legend = 'isect for %s' % mydate
         isect = []
         times = []
         ctop = []
