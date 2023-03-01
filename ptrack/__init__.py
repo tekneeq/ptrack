@@ -216,7 +216,7 @@ def create_app(test_config=None):
             ctop.append(d['ctop'][1])
             ptop.append(d['ptop'][1])
 
-        return render_template('line_chart.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times, legend=legend, processed_text=mydate)
+        return render_template('line_chart.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times, legend=legend, processed_text=len(isect))
 
     @app.route("/line_chart_two")
     def line_chart_two():
@@ -238,7 +238,7 @@ def create_app(test_config=None):
         expdate = '2023-03-01'
         data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.ASCENDING)
 
-        legend = 'isect / ctop / ptop'
+        legend = 'ctop / ptop for %s' % expdate
         isect = []
         times = []
         ctop = []
