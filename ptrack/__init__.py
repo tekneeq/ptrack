@@ -232,7 +232,23 @@ def create_app(test_config=None):
         vesto_col = db.vesto
 
         mydate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST'))
-        mydate = mydate + datetime.timedelta(1)
+
+        # Mon == 0
+        # Tue == 1
+        # Web == 2
+        # Thur == 3
+        # Fri == 4
+        # Sat == 5
+        # Sun == 6
+        days_to_add = 1
+        if mydate.weekday() == 4:
+            days_to_add = 3
+
+        # Sat
+        if mydate.weekday() == 5:
+            days_to_add = 2
+
+        mydate = mydate + datetime.timedelta(days_to_add)
         mydate = mydate.strftime('%Y-%m-%d')
 
         data = vesto_col.find({'exp_date': f'{mydate}'}).sort('data_date', pymongo.ASCENDING)
@@ -299,8 +315,22 @@ def create_app(test_config=None):
         vesto_col = db.vesto
 
         expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST'))
-        expdate = expdate + datetime.timedelta(1)
+
+
+        days_to_add = 1
+
+        # Friday
+        if expdate.weekday() == 4:
+            days_to_add = 3
+
+        # Sat
+        if expdate.weekday() == 5:
+            days_to_add = 2
+
+        expdate = expdate + datetime.timedelta(days_to_add)
         expdate = expdate.strftime('%Y-%m-%d')
+
+
         data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.ASCENDING)
 
         legend = 'ctop / ptop for %s' % expdate
@@ -316,6 +346,28 @@ def create_app(test_config=None):
 
         return render_template('line_chart_two.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times,
                                legend=legend)
+
+    @app.route('/lcc3')
+    def lcc3():
+
+        # Define Plot Data
+        labels = [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+        ]
+
+        data = [0, 10, 15, 8, 22, 18, 25]
+
+        # Return the components to the HTML template
+        return render_template(
+            template_name_or_list='new_line_chart.html',
+            data=data,
+            labels=labels,
+        )
 
     from . import db
     db.init_app(app)
