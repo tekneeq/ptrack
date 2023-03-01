@@ -199,6 +199,7 @@ def create_app(test_config=None):
         vesto_col = db.vesto
 
         #mydate = datetime.datetime.strptime(mydate, '%Y-%m-%d').date()
+        mydate = '2023-03-01'
 
         # expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
         # expdate = datetime.datetime.now(tz).strftime('%Y-%m-%d')
