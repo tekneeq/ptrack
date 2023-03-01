@@ -351,23 +351,37 @@ def create_app(test_config=None):
     @app.route('/lcc3/<mydate>')
     def lcc3(mydate=datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')):
 
-        # Define Plot Data
-        labels = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-        ]
+        client = MongoClient(host=app.config['HOST'],
+                             port=27017,
+                             username=app.config['USER'],
+                             password=app.config['PASSWORD'],
+                             tls=True,
+                             tlsAllowInvalidCertificates=True,
+                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
+                             )
+        db = client.vesto
+        vesto_col = db.vesto
 
-        data = [0, 10, 15, 8, 22, 18, 25]
+        data = vesto_col.find({'exp_date': f'{mydate}'}).sort('data_date', pymongo.ASCENDING)
+
+        isect = []
+        times = []
+        ctop = []
+        ptop = []
+        for d in data:
+            times.append(d['data_date'])
+            isect.append(d['intersection'][0])
+            ctop.append(d['ctop'][1])
+            ptop.append(d['ptop'][1])
+
+
 
         # Return the components to the HTML template
         return render_template(
             template_name_or_list='new_line_chart.html',
-            data=data,
-            labels=labels,
+            ctop=ctop,
+            ptop=ptop,
+            labels=times,
         )
 
     from . import db

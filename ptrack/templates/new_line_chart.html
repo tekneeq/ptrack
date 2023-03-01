@@ -20,8 +20,15 @@
                 label: 'Sales',
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
-                data: {{ data | tojson}},
-            }]
+                data: {{ ctop | tojson}},
+            },
+            {
+                label: 'Sales',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ ptop | tojson}},
+            },
+            ]
         };
 
         const config = {
