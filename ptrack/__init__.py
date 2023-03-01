@@ -198,7 +198,7 @@ def create_app(test_config=None):
         db = client.vesto
         vesto_col = db.vesto
 
-        mydate = datetime.datetime.strptime(mydate, '%Y-%m-%d').date()
+        #mydate = datetime.datetime.strptime(mydate, '%Y-%m-%d').date()
 
         # expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
         # expdate = datetime.datetime.now(tz).strftime('%Y-%m-%d')
@@ -215,7 +215,7 @@ def create_app(test_config=None):
             ctop.append(d['ctop'][1])
             ptop.append(d['ptop'][1])
 
-        return render_template('line_chart.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times, legend=legend)
+        return render_template('line_chart.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times, legend=legend, processed_text=mydate)
 
     @app.route("/line_chart_two")
     def line_chart_two():
