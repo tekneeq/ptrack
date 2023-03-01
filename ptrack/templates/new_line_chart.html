@@ -17,13 +17,13 @@
         const data = {
             labels: labels,
             datasets: [{
-                label: 'Sales',
+                label: 'ctop',
                 backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(0, 255, 0)',
                 data: {{ ctop | tojson}},
             },
             {
-                label: 'Sales',
+                label: 'ptop',
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: {{ ptop | tojson}},
