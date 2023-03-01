@@ -348,7 +348,8 @@ def create_app(test_config=None):
                                legend=legend)
 
     @app.route('/lcc3')
-    def lcc3():
+    @app.route('/lcc3/<mydate>')
+    def lcc3(mydate=datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')):
 
         # Define Plot Data
         labels = [
