@@ -216,7 +216,7 @@ def create_app(test_config=None):
             ctop.append(d['ctop'][1])
             ptop.append(d['ptop'][1])
 
-        mystr = f'{len(times)}, '
+        #mystr = f'{len(times)}, '
 
         return render_template('line_chart.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times, legend=legend, processed_text="abc")
 
