@@ -386,7 +386,7 @@ def create_app(test_config=None):
 
     @app.route('/lcc4')
     @app.route('/lcc4/<mydate>')
-    def lcc3(mydate=datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')):
+    def lcc4(mydate=datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')):
 
         client = MongoClient(host=app.config['HOST'],
                              port=27017,
