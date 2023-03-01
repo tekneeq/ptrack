@@ -216,7 +216,9 @@ def create_app(test_config=None):
             ctop.append(d['ctop'][1])
             ptop.append(d['ptop'][1])
 
-        return render_template('line_chart.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times, legend=legend, processed_text=len(isect))
+        mystr = "%s %s %s %s" % (times, isect, ctop, ptop)
+
+        return render_template('line_chart.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times, legend=legend, processed_text=mystr)
 
     @app.route("/line_chart_two")
     def line_chart_two():
