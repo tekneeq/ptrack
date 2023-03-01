@@ -384,6 +384,44 @@ def create_app(test_config=None):
             labels=times,
         )
 
+    @app.route('/lcc4')
+    @app.route('/lcc4/<mydate>')
+    def lcc3(mydate=datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')):
+
+        client = MongoClient(host=app.config['HOST'],
+                             port=27017,
+                             username=app.config['USER'],
+                             password=app.config['PASSWORD'],
+                             tls=True,
+                             tlsAllowInvalidCertificates=True,
+                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
+                             )
+        db = client.vesto
+        vesto_col = db.vesto
+
+        data = vesto_col.find({'exp_date': f'{mydate}'}).sort('data_date', pymongo.ASCENDING)
+
+        isect = []
+        times = []
+        ctop = []
+        ptop = []
+        for d in data:
+            times.append(d['data_date'])
+            isect.append(d['intersection'][0])
+            ctop.append(d['ctop'][1])
+            ptop.append(d['ptop'][1])
+
+
+
+        # Return the components to the HTML template
+        return render_template(
+            template_name_or_list='new_new_line_chart.html',
+            ctop=ctop,
+            ptop=ptop,
+            isect=isect,
+            labels=times,
+        )
+
     from . import db
     db.init_app(app)
 
