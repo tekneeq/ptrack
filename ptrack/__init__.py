@@ -411,6 +411,7 @@ def create_app(test_config=None):
             ctop.append(d['ctop'][1])
             ptop.append(d['ptop'][1])
 
+        title = f'{mydate}'
 
 
         # Return the components to the HTML template
@@ -420,6 +421,7 @@ def create_app(test_config=None):
             ptop=ptop,
             isect=isect,
             labels=times,
+            title=title,
         )
 
     from . import db
