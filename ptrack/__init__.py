@@ -405,14 +405,37 @@ def create_app(test_config=None):
         times = []
         ctop = []
         ptop = []
+
+        cprice = []
+        coi = []
+        cvol = []
+        cdelta = []
+        cgamma = []
+
+        pprice = []
+        poi = []
+        pvol = []
+        pdelta = []
+        pgamma = []
         for d in data:
             times.append(d['data_date'])
             isect.append(d['intersection'][0])
             ctop.append(d['ctop'][1])
             ptop.append(d['ptop'][1])
 
-        title = f'{mydate}'
+            cprice.append(d['price_sum_call'])
+            coi.append(d['oi_sum_call'])
+            cvol.append(d['vol_sum_call'])
+            cdelta.append(d['delta_sum_call'])
+            cgamma.append(d['gamma_sum_call'])
 
+            pprice.append(d['price_sum_put'])
+            poi.append(d['oi_sum_put'])
+            pvol.append(d['vol_sum_put'])
+            pdelta.append(d['delta_sum_put'])
+            pgamma.append(d['gamma_sum_put'])
+
+        title = f'{mydate}'
 
         # Return the components to the HTML template
         return render_template(
@@ -422,6 +445,16 @@ def create_app(test_config=None):
             isect=isect,
             labels=times,
             title=title,
+            cprice=cprice,
+            coi=coi,
+            cvol=cvol,
+            cdelta=cdelta,
+            cgamma=cgamma,
+            pprice=pprice,
+            poi=poi,
+            pvol=pvol,
+            pdelta=pdelta,
+            pgamma=pgamma,
         )
 
     from . import db
