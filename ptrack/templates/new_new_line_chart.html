@@ -36,6 +36,10 @@
     </div>
 
     <div style="height: 50vh; width: 50%;">
+        <canvas id="myChart3a"></canvas>
+    </div>
+
+    <div style="height: 50vh; width: 50%;">
         <canvas id="myChart4"></canvas>
     </div>
 
@@ -47,6 +51,18 @@
     <div style="height: 50vh; width: 50%;">
         <canvas id="myChart6"></canvas>
     </div>
+
+
+    <div style="height: 50vh; width: 50%;">
+        <canvas id="myChart7"></canvas>
+    </div>
+
+
+    <div style="height: 50vh; width: 50%;">
+        <canvas id="myChart8"></canvas>
+    </div>
+
+
 
 
     <script>
@@ -138,6 +154,35 @@
         );
 
 
+        const data3a = {
+            labels: labels,
+            datasets: [{
+                label: 'cvol',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(0, 255, 0)',
+                data: {{ cvol | tojson}},
+            },
+            {
+                label: 'pvol',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ pvol | tojson}},
+            },
+            ]
+        };
+
+        const config3a = {
+            type: 'line',
+            data: data3a,
+            options: { maintainAspectRatio: false }
+        };
+
+        const myChart3a = new Chart(
+            document.getElementById('myChart3a'),
+            config3a
+        );
+
+
 
 
 
@@ -222,6 +267,65 @@
             config6
         );
 
+
+        const data7 = {
+            labels: labels,
+            datasets: [
+            {
+                label: 'ctheta',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(0, 255, 0)',
+                data: {{ ctheta | tojson}},
+            },
+            {
+                label: 'ptheta',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ ptheta | tojson}},
+            },
+            ]
+        };
+
+        const config7 = {
+            type: 'line',
+            data: data7,
+            options: { maintainAspectRatio: false }
+        };
+
+        const myChart7 = new Chart(
+            document.getElementById('myChart7'),
+            config7
+        );
+
+
+        const data8 = {
+            labels: labels,
+            datasets: [
+            {
+                label: 'civ',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(0, 255, 0)',
+                data: {{ civ | tojson}},
+            },
+            {
+                label: 'piv',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ piv | tojson}},
+            },
+            ]
+        };
+
+        const config8 = {
+            type: 'line',
+            data: data8,
+            options: { maintainAspectRatio: false }
+        };
+
+        const myChart8 = new Chart(
+            document.getElementById('myChart8'),
+            config8
+        );
 
 
 
