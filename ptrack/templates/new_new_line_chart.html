@@ -35,6 +35,10 @@
         <canvas id="myChart3"></canvas>
     </div>
 
+    <div style="height: 50vh; width: 50%;">
+        <canvas id="myChart4"></canvas>
+    </div>
+
 
     <script>
 
@@ -107,7 +111,7 @@
             {
                 label: 'poi',
                 backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(0, 255, 0)',
+                borderColor: 'rgb(255, 99, 132)',
                 data: {{ poi | tojson}},
             },
             ]
@@ -122,6 +126,40 @@
         const myChart3 = new Chart(
             document.getElementById('myChart3'),
             config3
+        );
+
+
+
+
+
+
+
+        const data4 = {
+            labels: labels,
+            datasets: [{
+                label: 'delta',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(0, 255, 0)',
+                data: {{ coi | tojson}},
+            },
+            {
+                label: 'gamma',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ poi | tojson}},
+            },
+            ]
+        };
+
+        const config4 = {
+            type: 'line',
+            data: data4,
+            options: { maintainAspectRatio: false }
+        };
+
+        const myChart4 = new Chart(
+            document.getElementById('myChart4'),
+            config4
         );
 
 

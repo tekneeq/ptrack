@@ -417,6 +417,8 @@ def create_app(test_config=None):
         pvol = []
         pdelta = []
         pgamma = []
+        delta = []
+        gamma = []
         for d in data:
             times.append(d['data_date'])
             isect.append(d['intersection'][0])
@@ -434,6 +436,9 @@ def create_app(test_config=None):
             pvol.append(d['vol_sum_put'])
             pdelta.append(d['delta_sum_put'])
             pgamma.append(d['gamma_sum_put'])
+
+            delta.append(d['delta_sum_call'] + d['delta_sum_put'])
+            gamma.append(d['gamma_sum_call'] + d['gamma_sum_put'])
 
         title = f'{mydate}'
 
@@ -455,6 +460,8 @@ def create_app(test_config=None):
             pvol=pvol,
             pdelta=pdelta,
             pgamma=pgamma,
+            delta=delta,
+            gamma=gamma,
         )
 
     from . import db
