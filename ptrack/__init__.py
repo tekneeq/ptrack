@@ -399,7 +399,7 @@ def create_app(test_config=None):
         db = client.vesto
         vesto_col = db.vesto
 
-        data = vesto_col.find({'exp_date': f'{mydate}'}).sort('data_date', pymongo.ASCENDING)
+        data = vesto_col.find({'exp_date': f'{mydate}', 'version': 2}).sort('data_date', pymongo.ASCENDING)
 
         isect = []
         times = []
