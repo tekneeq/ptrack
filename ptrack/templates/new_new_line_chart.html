@@ -39,6 +39,15 @@
         <canvas id="myChart4"></canvas>
     </div>
 
+    <div style="height: 50vh; width: 50%;">
+        <canvas id="myChart5"></canvas>
+    </div>
+
+
+    <div style="height: 50vh; width: 50%;">
+        <canvas id="myChart6"></canvas>
+    </div>
+
 
     <script>
 
@@ -142,12 +151,6 @@
                 borderColor: 'rgb(0, 255, 0)',
                 data: {{ delta | tojson}},
             },
-            {
-                label: 'gamma',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: {{ gamma | tojson}},
-            },
             ]
         };
 
@@ -159,6 +162,33 @@
 
         const myChart4 = new Chart(
             document.getElementById('myChart4'),
+            config4
+        );
+
+
+
+
+
+        const data5 = {
+            labels: labels,
+            datasets: [
+            {
+                label: 'gamma',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ gamma | tojson}},
+            },
+            ]
+        };
+
+        const config5 = {
+            type: 'line',
+            data: data5,
+            options: { maintainAspectRatio: false }
+        };
+
+        const myChart5 = new Chart(
+            document.getElementById('myChart5'),
             config4
         );
 
