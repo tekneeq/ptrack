@@ -411,12 +411,21 @@ def create_app(test_config=None):
         cvol = []
         cdelta = []
         cgamma = []
+        cvega = []
+        ctheta = []
+        civ = []
 
         pprice = []
         poi = []
         pvol = []
         pdelta = []
         pgamma = []
+        pvega = []
+        ptheta = []
+        piv = []
+
+
+
         delta = []
         gamma = []
         for d in data:
@@ -430,12 +439,18 @@ def create_app(test_config=None):
             cvol.append(d['vol_sum_call'])
             cdelta.append(d['delta_sum_call'])
             cgamma.append(d['gamma_sum_call'])
+            cvega.append(d['vega_avg_call'])
+            ctheta.append(d['theta_avg_call'])
+            civ.append(d['iv_avg_call'])
 
             pprice.append(d['price_sum_put'])
             poi.append(d['oi_sum_put'])
             pvol.append(d['vol_sum_put'])
             pdelta.append(d['delta_sum_put'])
             pgamma.append(d['gamma_sum_put'])
+            pvega.append(d['vega_avg_put'])
+            ptheta.append(d['theta_avg_put'])
+            piv.append(d['iv_avg_put'])
 
             delta.append(d['delta_sum_call'] + d['delta_sum_put'])
             gamma.append(d['gamma_sum_call'] + d['gamma_sum_put'])
@@ -455,11 +470,17 @@ def create_app(test_config=None):
             cvol=cvol,
             cdelta=cdelta,
             cgamma=cgamma,
+            cvega=cvega,
+            ctheta=ctheta,
+            civ=civ,
             pprice=pprice,
             poi=poi,
             pvol=pvol,
             pdelta=pdelta,
             pgamma=pgamma,
+            pvega=pvega,
+            ptheta=ptheta,
+            piv=piv,
             delta=delta,
             gamma=gamma,
         )

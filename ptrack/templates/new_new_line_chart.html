@@ -193,6 +193,35 @@
         );
 
 
+        const data6 = {
+            labels: labels,
+            datasets: [
+            {
+                label: 'cvega',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(0, 255, 0)',
+                data: {{ coi | tojson}},
+            },
+            {
+                label: 'pvega',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: {{ poi | tojson}},
+            },
+            ]
+        };
+
+        const config6 = {
+            type: 'line',
+            data: data6,
+            options: { maintainAspectRatio: false }
+        };
+
+        const myChart6 = new Chart(
+            document.getElementById('myChart6'),
+            config6
+        );
+
 
 
 
