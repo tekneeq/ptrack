@@ -60,10 +60,10 @@ for p in pkeys:
 
 
 for c in ckeys:
-    opt_list = calls[p]
+    opt_list = calls[c]
     opt_list = sorted(opt_list, key=lambda d: d['data_date'])
 
-    print(f"{p}")
+    print(f"{c}")
     for opt in opt_list:
         print(f"\t{opt['data_date']} {opt['open_interest']} {opt['volume']}")
 
