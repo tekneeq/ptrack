@@ -35,3 +35,23 @@ for opt in opts:
         puts[strike_price].append(opt)
 
 print(f"there are {len(calls)} call strikes and {len(puts)} put strikes")
+
+
+pkeys = list(puts.keys())
+pkeys.sort()
+
+ckeys = list(calls.keys())
+ckeys.sort()
+
+for p in pkeys:
+    opt_list = puts[p]
+    opt_list = sorted(opt_list, key=lambda d: d['data_date'], reverse=True)
+    for opt in opt_list:
+        print(opt['data_dict'])
+
+    break
+
+
+
+
+
