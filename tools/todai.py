@@ -1,3 +1,4 @@
+import argparse
 import datetime
 
 from pymongo import MongoClient
@@ -21,9 +22,33 @@ opts_col = db.opts
 
 today = datetime.datetime.today().strftime("%Y-%m-%d")
 
+
+
+
+parser = argparse.ArgumentParser(
+    prog="ProgramName",
+    description="What the program does",
+    epilog="Text at the bottom of help",
+)
+
+parser.add_argument("-t", type=str, dest="ticker", default="SPY")
+parser.add_argument("--dfn", dest="dfn", default=0, type=int)
+args = parser.parse_args()
+
+
+day = (today + datetime.timedelta(days=args.dfn)).strftime("%Y-%m-%d")
+
+
+
+
+
+
+
+
+
 puts = {}
 calls = {}
-opts = list(opts_col.find({"expiration_date": today, "data_date": {"$gt": today}}))
+opts = list(opts_col.find({"expiration_date": day, "data_date": {"$gt": today}}))
 
 for opt in opts:
     strike_price = opt['strike_price']
