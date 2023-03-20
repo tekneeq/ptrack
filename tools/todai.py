@@ -36,7 +36,7 @@ parser.add_argument("--dfn", dest="dfn", default=0, type=int)
 args = parser.parse_args()
 
 
-day = (today + datetime.timedelta(days=args.dfn)).strftime("%Y-%m-%d")
+day = (datetime.datetime.today() + datetime.timedelta(days=args.dfn)).strftime("%Y-%m-%d")
 
 
 
