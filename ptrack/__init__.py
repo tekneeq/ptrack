@@ -485,6 +485,57 @@ def create_app(test_config=None):
             gamma=gamma,
         )
 
+    @app.route('/lcc5/<mydate>/<sprice>')
+    def lcc5(mydate, sprice):
+
+        client = MongoClient(host=app.config['HOST'],
+                             port=27017,
+                             username=app.config['USER'],
+                             password=app.config['PASSWORD'],
+                             tls=True,
+                             tlsAllowInvalidCertificates=True,
+                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
+                             )
+        db = client.vesto
+        vesto_col = db.vesto
+
+
+    @app.route('/prices')
+    def lcc5(mydate, sprice):
+
+        client = MongoClient(host=app.config['HOST'],
+                             port=27017,
+                             username=app.config['USER'],
+                             password=app.config['PASSWORD'],
+                             tls=True,
+                             tlsAllowInvalidCertificates=True,
+                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
+                             )
+        db = client.vesto
+        prices_col = db.prices
+
+        """
+        prices_data = {
+          'ticker': TICKER,
+          'price': ticker_price_rounded
+          'data_date': data_date,
+          'version': 1
+        }
+        """
+
+        inserted_id = -1
+        try:
+            data = json.loads(request.data)
+
+            inserted_id = prices_col.insert_one(data).inserted_id
+
+        except Exception as e:
+            pass
+
+
+        return render_template("index.html", user_image="static/jpuff.png",
+                               processed_text=inserted_id)
+
     from . import db
     db.init_app(app)
 
