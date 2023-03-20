@@ -1,7 +1,7 @@
 import datetime
 
 from pymongo import MongoClient
-import instance.config as config
+import config as config
 
 client = MongoClient(host=config.HOST,
                      port=27017,
@@ -16,14 +16,12 @@ opts_col = db.opts
 
 today = datetime.datetime.today().strftime("%Y-%m-%d")
 
-
 puts = {}
 calls = {}
 opts = list(opts_col.find({"expiration_date": today, "data_date": {"$gt": today}}))
 
 for opt in opts:
     strike_price = opt['strike_price']
-
 
     if opt['type'] == "call":
         if not strike_price in calls:
