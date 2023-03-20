@@ -501,7 +501,7 @@ def create_app(test_config=None):
 
 
     @app.route('/prices')
-    def lcc5(mydate, sprice):
+    def prices(mydate, sprice):
 
         client = MongoClient(host=app.config['HOST'],
                              port=27017,
