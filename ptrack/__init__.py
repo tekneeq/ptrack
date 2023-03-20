@@ -500,7 +500,7 @@ def create_app(test_config=None):
         vesto_col = db.vesto
 
 
-    @app.route('/prices')
+    @app.route('/prices', methods=['GET', 'POST'])
     def prices():
 
         client = MongoClient(host=app.config['HOST'],
