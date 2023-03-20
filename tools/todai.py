@@ -3,6 +3,11 @@ import datetime
 from pymongo import MongoClient
 import config as config
 
+"""
+python3 todai.py
+"""
+
+
 client = MongoClient(host=config.HOST,
                      port=27017,
                      username=config.USER,
@@ -47,7 +52,7 @@ for p in pkeys:
     opt_list = puts[p]
     opt_list = sorted(opt_list, key=lambda d: d['data_date'], reverse=True)
     for opt in opt_list:
-        print(opt['data_dict'])
+        print(opt['data_date'])
 
     break
 
