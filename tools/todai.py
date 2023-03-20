@@ -54,7 +54,7 @@ for p in pkeys:
 
     print(f"{p}")
     for opt in opt_list:
-        print(f"\t{opt['data_date']}")
+        print(f"\t{opt['data_date']} {opt['open_interest']} {opt['volume']}")
 
 
 
