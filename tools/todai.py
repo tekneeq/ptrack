@@ -50,7 +50,7 @@ ckeys.sort()
 
 for p in pkeys:
     opt_list = puts[p]
-    opt_list = sorted(opt_list, key=lambda d: d['data_date'], reverse=True)
+    opt_list = sorted(opt_list, key=lambda d: d['data_date'])
     for opt in opt_list:
         print(opt['data_date'])
 
