@@ -78,7 +78,7 @@ for p in pkeys:
     opt_list = puts[p]
     opt_list = sorted(opt_list, key=lambda d: d['data_date'])
 
-    print(f"{p}")
+    print(f"{p}: PUT")
     for opt in opt_list:
         print(f"\t{opt['data_date']} {opt['open_interest']} {opt['volume']}")
 
@@ -89,7 +89,7 @@ for c in ckeys:
     opt_list = calls[c]
     opt_list = sorted(opt_list, key=lambda d: d['data_date'])
 
-    print(f"{c}")
+    print(f"{c}: CALL")
     for opt in opt_list:
         print(f"\t{opt['data_date']} {opt['open_interest']} {opt['volume']}")
 
