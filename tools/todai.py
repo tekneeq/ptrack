@@ -48,6 +48,7 @@ day = (datetime.datetime.today() + datetime.timedelta(days=args.dfn)).strftime("
 
 puts = {}
 calls = {}
+print(f"Checking {day}")
 opts = list(opts_col.find({"expiration_date": day, "data_date": {"$gt": today}}))
 
 for opt in opts:
