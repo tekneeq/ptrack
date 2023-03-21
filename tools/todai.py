@@ -115,7 +115,7 @@ for c in ckeys:
     for opt in opt_list:
         print(f"\t{opt['data_date']} {opt['open_interest']} {opt['volume']}")
 
-        if opt['open_interest'] > highest_oi:
+        if opt['open_interest'] > highest_oi_c:
             highest_oi_c = opt['open_interest']
             highest_oi_c_key = c
 
