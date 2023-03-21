@@ -74,17 +74,39 @@ pkeys.sort()
 ckeys = list(calls.keys())
 ckeys.sort()
 
+
+"""
+puts = {
+    "390": [{'open_interest': 1000, ..., }, ..., {}]
+
+}
+"""
+"""
+Use cases:
+
+1) I want to know whos buying and selling options
+    Are we buying more puts? more calls? in what degree
+"""
+highest_oi = 0
+highest_oi_key = 0
 for p in pkeys:
+    # p is the strike rice
     opt_list = puts[p]
     opt_list = sorted(opt_list, key=lambda d: d['data_date'])
+
 
     print(f"{p}: PUT")
     for opt in opt_list:
         print(f"\t{opt['data_date']} {opt['open_interest']} {opt['volume']}")
+        if opt['open_interest'] > highest_oi:
+            highest_oi = opt['open_interest']
+            highest_oi_key = p
 
 
 
 
+highest_oi_c = 0
+highest_oi_c_key = 0
 for c in ckeys:
     opt_list = calls[c]
     opt_list = sorted(opt_list, key=lambda d: d['data_date'])
@@ -92,6 +114,16 @@ for c in ckeys:
     print(f"{c}: CALL")
     for opt in opt_list:
         print(f"\t{opt['data_date']} {opt['open_interest']} {opt['volume']}")
+
+        if opt['open_interest'] > highest_oi:
+            highest_oi_c = opt['open_interest']
+            highest_oi_c_key = c
+
+print("Puts")
+print(f"{highest_oi_key}: {highest_oi}")
+print("Calls")
+print(f"{highest_oi_c_key}: {highest_oi_c}")
+
 
 
 
