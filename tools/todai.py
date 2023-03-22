@@ -38,10 +38,49 @@ args = parser.parse_args()
 day = (datetime.datetime.today() + datetime.timedelta(days=args.dfn)).strftime("%Y-%m-%d")
 
 
+def process_opt_list(opt_list):
+    puts = {}
+    calls = {}
+
+    for opt in opt_list:
+        strike_price = opt['strike_price']
+
+        if opt['type'] == "call":
+            if not strike_price in calls:
+                calls[strike_price] = []
+
+            calls[strike_price].append(opt)
+
+        else:
+            if not strike_price in puts:
+                puts[strike_price] = []
+            puts[strike_price].append(opt)
+
+    return (puts, calls)
+
+
 yesterday = None
+p_oi_sum = 0
+c_oi_sum = 0
 if args.dfn == 0:
     yesterday = (datetime.datetime.today() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
     opts = list(opts_col.find({"expiration_date": yesterday, "data_date": {"$gt": yesterday}}))
+
+    p, c = process_opt_list(opts)
+
+    for pkey, pval in p.items():
+        opt_list = sorted(pval, key=lambda d: d['data_date'])
+
+        for idx, o in enumerate(opt_list):
+            if idx == len(opt_list) - 1:
+                p_oi_sum += o['open_interest']
+
+    for ckey, cval in c.items():
+        opt_list = sorted(cval, key=lambda d: d['data_date'])
+
+        for idx, o in enumerate(opt_list):
+            if idx == len(opt_list) - 1:
+                c_oi_sum += o['open_interest']
 
 
 
@@ -147,9 +186,9 @@ for c in ckeys:
             print(f"Adding first: {opt['open_interest']}")
 
 print("Puts")
-print(f"{highest_oi_key}: {highest_oi}, sum {sum_oi} {sum_oi_prev}")
+print(f"{highest_oi_key}: {highest_oi}, sum {sum_oi} {p_oi_sum}")
 print("Calls")
-print(f"{highest_oi_c_key}: {highest_oi_c}, sum {sum_oi_c} {sum_oi_c_prev}")
+print(f"{highest_oi_c_key}: {highest_oi_c}, sum {sum_oi_c} {c_oi_sum}")
 #
 
 
