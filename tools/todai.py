@@ -115,7 +115,7 @@ for p in pkeys:
         if idx == len(opt_list) - 1:
             sum_oi += opt['open_interest']
 
-        if idx == len(opt_list) - 2:
+        if idx == 0:
             sum_oi_prev += opt['open_interest']
 
 
@@ -141,7 +141,7 @@ for c in ckeys:
         if idx == len(opt_list) - 1:
             sum_oi_c += opt['open_interest']
 
-        if idx == len(opt_list) - 2:
+        if idx == 0:
             sum_oi_c_prev += opt['open_interest']
 
 print("Puts")
