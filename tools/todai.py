@@ -140,9 +140,11 @@ for c in ckeys:
         # sum the latest oi
         if idx == len(opt_list) - 1:
             sum_oi_c += opt['open_interest']
+            print(f"Adding last: {opt['open_interest']}")
 
         if idx == 0:
             sum_oi_c_prev += opt['open_interest']
+            print(f"Adding first: {opt['open_interest']}")
 
 print("Puts")
 print(f"{highest_oi_key}: {highest_oi}, sum {sum_oi} {sum_oi_prev}")
