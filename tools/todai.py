@@ -35,8 +35,14 @@ parser.add_argument("-t", type=str, dest="ticker", default="SPY")
 parser.add_argument("--dfn", dest="dfn", default=0, type=int)
 args = parser.parse_args()
 
-
 day = (datetime.datetime.today() + datetime.timedelta(days=args.dfn)).strftime("%Y-%m-%d")
+
+
+yesterday = None
+if args.dfn == 0:
+    yesterday = (datetime.datetime.today() - datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+    opts = list(opts_col.find({"expiration_date": yesterday, "data_date": {"$gt": yesterday}}))
+
 
 
 
@@ -89,6 +95,7 @@ Use cases:
 """
 highest_oi = 0
 highest_oi_key = 0
+sum_oi = 0
 for p in pkeys:
     # p is the strike rice
     opt_list = puts[p]
@@ -96,33 +103,43 @@ for p in pkeys:
 
 
     print(f"{p}: PUT")
-    for opt in opt_list:
-        print(f"\t{opt['data_date']} {opt['open_interest']} {opt['volume']}")
+    for idx, opt in enumerate(opt_list):
+        print(f"\t{opt['data_date']} oi: {opt['open_interest']} volume: {opt['volume']}")
+
         if opt['open_interest'] > highest_oi:
             highest_oi = opt['open_interest']
             highest_oi_key = p
+
+        # sum the latest oi
+        if idx == len(opt_list) - 1:
+            sum_oi += opt['open_interest']
 
 
 
 
 highest_oi_c = 0
 highest_oi_c_key = 0
+sum_oi_c = 0
 for c in ckeys:
     opt_list = calls[c]
     opt_list = sorted(opt_list, key=lambda d: d['data_date'])
 
     print(f"{c}: CALL")
-    for opt in opt_list:
+    for idx, opt in enumerate(opt_list):
         print(f"\t{opt['data_date']} {opt['open_interest']} {opt['volume']}")
 
         if opt['open_interest'] > highest_oi_c:
             highest_oi_c = opt['open_interest']
             highest_oi_c_key = c
 
+        # sum the latest oi
+        if idx == len(opt_list) - 1:
+            sum_oi_c += opt['open_interest']
+
 print("Puts")
-print(f"{highest_oi_key}: {highest_oi}")
+print(f"{highest_oi_key}: {highest_oi}, sum {sum_oi}")
 print("Calls")
-print(f"{highest_oi_c_key}: {highest_oi_c}")
+print(f"{highest_oi_c_key}: {highest_oi_c}, sum {sum_oi_c}")
 
 
 
