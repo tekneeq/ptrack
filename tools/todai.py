@@ -96,6 +96,7 @@ Use cases:
 highest_oi = 0
 highest_oi_key = 0
 sum_oi = 0
+sum_oi_prev = 0
 for p in pkeys:
     # p is the strike rice
     opt_list = puts[p]
@@ -114,12 +115,16 @@ for p in pkeys:
         if idx == len(opt_list) - 1:
             sum_oi += opt['open_interest']
 
+        if idx == len(opt_list) - 2:
+            sum_oi_prev += opt['open_interest']
+
 
 
 
 highest_oi_c = 0
 highest_oi_c_key = 0
 sum_oi_c = 0
+sum_oi_c_prev = 0
 for c in ckeys:
     opt_list = calls[c]
     opt_list = sorted(opt_list, key=lambda d: d['data_date'])
@@ -136,10 +141,13 @@ for c in ckeys:
         if idx == len(opt_list) - 1:
             sum_oi_c += opt['open_interest']
 
+        if idx == len(opt_list) - 2:
+            sum_oi_c_prev += opt['open_interest']
+
 print("Puts")
-print(f"{highest_oi_key}: {highest_oi}, sum {sum_oi}")
+print(f"{highest_oi_key}: {highest_oi}, sum {sum_oi} {sum_oi-sum_oi_prev}")
 print("Calls")
-print(f"{highest_oi_c_key}: {highest_oi_c}, sum {sum_oi_c}")
+print(f"{highest_oi_c_key}: {highest_oi_c}, sum {sum_oi_c} {sum_oi_c-sum_oi_c_prev}")
 
 
 
