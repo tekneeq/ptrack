@@ -1,4 +1,5 @@
 import os
+import logging
 
 import pymongo
 from flask import Flask, render_template, request, json, Response
@@ -7,6 +8,13 @@ import datetime
 
 from pymongo import MongoClient
 from datetime import timezone
+
+logging.basicConfig(
+    filename="example.log",
+    encoding="utf-8",
+    format="%(levelname)s %(asctime)s %(message)s",
+    level=logging.DEBUG,
+)
 
 
 def create_app(test_config=None):
@@ -20,17 +28,16 @@ def create_app(test_config=None):
     """
 
     app.config.from_mapping(
-        DATABASE=os.path.join(app.instance_path, 'ptrack.sqlite'),
-        SECRET_KEY='dev'
+        DATABASE=os.path.join(app.instance_path, "ptrack.sqlite"), SECRET_KEY="dev"
     )
 
-    IMG_FOLDER = os.path.join('ptrack', 'images')
-    app.config['UPLOAD_FOLDER'] = IMG_FOLDER
+    IMG_FOLDER = os.path.join("ptrack", "images")
+    app.config["UPLOAD_FOLDER"] = IMG_FOLDER
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
         print("Loading config from config.py")
-        app.config.from_pyfile('config.py')
+        app.config.from_pyfile("config.py")
     else:
         # load the test config if passed in
         app.config.from_mapping(test_config)
@@ -42,27 +49,39 @@ def create_app(test_config=None):
         pass
 
     # a simple page that says hello
-    @app.route('/noclip')
+    @app.route("/noclip")
     def hidden():
-        return render_template("index.html", user_image="static/1.combined.png",
-                               processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
+        return render_template(
+            "index.html",
+            user_image="static/1.combined.png",
+            processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"),
+        )
 
-    @app.route('/noclip2')
+    @app.route("/noclip2")
     def noclip():
-        return render_template("index.html", user_image="static/2.combined.png",
-                               processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
+        return render_template(
+            "index.html",
+            user_image="static/2.combined.png",
+            processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"),
+        )
 
-    @app.route('/noclip3')
+    @app.route("/noclip3")
     def noclip3():
-        return render_template("index.html", user_image="static/3.combined.png",
-                               processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
+        return render_template(
+            "index.html",
+            user_image="static/3.combined.png",
+            processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"),
+        )
 
-    @app.route('/noclip4')
+    @app.route("/noclip4")
     def noclip4():
-        return render_template("index.html", user_image="static/4.combined.png",
-                               processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"))
+        return render_template(
+            "index.html",
+            user_image="static/4.combined.png",
+            processed_text=datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S"),
+        )
 
-    @app.route('/progress')
+    @app.route("/progress")
     def progress():
         def generate():
             x = 0
@@ -72,24 +91,25 @@ def create_app(test_config=None):
                 x = x + 10
                 time.sleep(0.5)
 
-        return Response(generate(), mimetype='text/event-stream')
+        return Response(generate(), mimetype="text/event-stream")
 
-    @app.route('/chart')
+    @app.route("/chart")
     def chart():
         return render_template("chartme.html", data="hello")
 
-    @app.route('/mongo', methods=['GET', 'POST'])
+    @app.route("/mongo", methods=["GET", "POST"])
     def mongo():
         import pymongo
 
-        client = MongoClient(host=app.config['HOST'],
-                             port=27017,
-                             username=app.config['USER'],
-                             password=app.config['PASSWORD'],
-                             tls=True,
-                             tlsAllowInvalidCertificates=True,
-                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
-                             )
+        client = MongoClient(
+            host=app.config["HOST"],
+            port=27017,
+            username=app.config["USER"],
+            password=app.config["PASSWORD"],
+            tls=True,
+            tlsAllowInvalidCertificates=True,
+            tlsCAFile="/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem",
+        )
         db = client.vesto
         vesto_col = db.vesto
 
@@ -98,36 +118,40 @@ def create_app(test_config=None):
         try:
             data = json.loads(request.data)
 
-            intersection = data['intersection']
-            ptop = data['ptop']
-            pbot = data['pbot']
+            intersection = data["intersection"]
+            ptop = data["ptop"]
+            pbot = data["pbot"]
 
-            ctop = data['ctop']
-            cbot = data['cbot']
+            ctop = data["ctop"]
+            cbot = data["cbot"]
 
-            data_date = datetime.datetime.strptime(data['data_date'], '%Y-%m-%dT%H:%M:%S').date()
-            version = data['version']
+            data_date = datetime.datetime.strptime(
+                data["data_date"], "%Y-%m-%dT%H:%M:%S"
+            ).date()
+            version = data["version"]
 
             inserted_id = vesto_col.insert_one(data).inserted_id
 
         except:
             pass
 
-        return render_template("index.html", user_image="static/jpuff.png",
-                               processed_text=inserted_id)
+        return render_template(
+            "index.html", user_image="static/jpuff.png", processed_text=inserted_id
+        )
 
-    @app.route('/mongo_delete', methods=['GET', 'POST'])
+    @app.route("/mongo_delete", methods=["GET", "POST"])
     def mongo_delete():
         import pymongo
 
-        client = MongoClient(host=app.config['HOST'],
-                             port=27017,
-                             username=app.config['USER'],
-                             password=app.config['PASSWORD'],
-                             tls=True,
-                             tlsAllowInvalidCertificates=True,
-                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
-                             )
+        client = MongoClient(
+            host=app.config["HOST"],
+            port=27017,
+            username=app.config["USER"],
+            password=app.config["PASSWORD"],
+            tls=True,
+            tlsAllowInvalidCertificates=True,
+            tlsCAFile="/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem",
+        )
         db = client.vesto
         vesto_col = db.vesto
 
@@ -139,7 +163,7 @@ def create_app(test_config=None):
 
             # data_date = datetime.datetime.strptime(data['data_date'], '%Y-%m-%d').date()
             # tz = timezone('EST')
-            data_date = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+            data_date = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 
             # inserted_id = vesto_col.insert_one(data).inserted_id
 
@@ -153,85 +177,99 @@ def create_app(test_config=None):
         except Exception as e:
             docs = e
 
-        return render_template("index.html", user_image="static/jpuff.png",
-                               processed_text=docs)
+        return render_template(
+            "index.html", user_image="static/jpuff.png", processed_text=docs
+        )
 
-    @app.route('/mongo_opts', methods=['GET', 'POST'])
+    @app.route("/mongo_opts", methods=["GET", "POST"])
     def mongo_opts():
         import pymongo
 
-        client = MongoClient(host=app.config['HOST'],
-                             port=27017,
-                             username=app.config['USER'],
-                             password=app.config['PASSWORD'],
-                             tls=True,
-                             tlsAllowInvalidCertificates=True,
-                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
-                             )
+        client = MongoClient(
+            host=app.config["HOST"],
+            port=27017,
+            username=app.config["USER"],
+            password=app.config["PASSWORD"],
+            tls=True,
+            tlsAllowInvalidCertificates=True,
+            tlsCAFile="/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem",
+        )
         db = client.vesto
         opts_col = db.opts
 
         inserted_id = -1
         try:
             data = json.loads(request.data)
-
+            logging.INFO("/mongo_opts: received %s" % data)
             inserted_id = opts_col.insert_one(data).inserted_id
 
         except Exception as e:
             pass
 
-        return render_template("index.html", user_image="static/jpuff.png",
-                               processed_text=inserted_id)
+        return render_template(
+            "index.html", user_image="static/jpuff.png", processed_text=inserted_id
+        )
 
-    @app.route('/lc')
+    @app.route("/lc")
     def lc():
-
-        client = MongoClient(host=app.config['HOST'],
-                             port=27017,
-                             username=app.config['USER'],
-                             password=app.config['PASSWORD'],
-                             tls=True,
-                             tlsAllowInvalidCertificates=True,
-                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
-                             )
+        client = MongoClient(
+            host=app.config["HOST"],
+            port=27017,
+            username=app.config["USER"],
+            password=app.config["PASSWORD"],
+            tls=True,
+            tlsAllowInvalidCertificates=True,
+            tlsCAFile="/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem",
+        )
         db = client.vesto
         vesto_col = db.vesto
 
-        mydate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
+        mydate = datetime.datetime.now(
+            timezone(datetime.timedelta(hours=-5), "EST")
+        ).strftime("%Y-%m-%d")
 
-        data = vesto_col.find({'exp_date': f'{mydate}'}).sort('data_date', pymongo.ASCENDING)
+        data = vesto_col.find({"exp_date": f"{mydate}"}).sort(
+            "data_date", pymongo.ASCENDING
+        )
 
-        legend = 'isect for %s' % mydate
+        legend = "isect for %s" % mydate
         isect = []
         times = []
         ctop = []
         ptop = []
         for d in data:
-            times.append(d['data_date'])
-            isect.append(d['intersection'][0])
-            ctop.append(d['ctop'][1])
-            ptop.append(d['ptop'][1])
+            times.append(d["data_date"])
+            isect.append(d["intersection"][0])
+            ctop.append(d["ctop"][1])
+            ptop.append(d["ptop"][1])
 
-        mystr = f'{len(times)}, {len(isect)}, {len(ctop)}, {len(ptop)}'
+        mystr = f"{len(times)}, {len(isect)}, {len(ctop)}, {len(ptop)}"
 
-        return render_template('line_chart.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times,
-                               legend=legend, processed_text=mystr)
+        return render_template(
+            "line_chart.html",
+            values=isect,
+            values_ctop=ctop,
+            values_ptop=ptop,
+            labels=times,
+            legend=legend,
+            processed_text=mystr,
+        )
 
-    @app.route('/lc2')
+    @app.route("/lc2")
     def lc2():
-
-        client = MongoClient(host=app.config['HOST'],
-                             port=27017,
-                             username=app.config['USER'],
-                             password=app.config['PASSWORD'],
-                             tls=True,
-                             tlsAllowInvalidCertificates=True,
-                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
-                             )
+        client = MongoClient(
+            host=app.config["HOST"],
+            port=27017,
+            username=app.config["USER"],
+            password=app.config["PASSWORD"],
+            tls=True,
+            tlsAllowInvalidCertificates=True,
+            tlsCAFile="/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem",
+        )
         db = client.vesto
         vesto_col = db.vesto
 
-        mydate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST'))
+        mydate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), "EST"))
 
         # Mon == 0
         # Tue == 1
@@ -249,73 +287,91 @@ def create_app(test_config=None):
             days_to_add = 2
 
         mydate = mydate + datetime.timedelta(days_to_add)
-        mydate = mydate.strftime('%Y-%m-%d')
+        mydate = mydate.strftime("%Y-%m-%d")
 
-        data = vesto_col.find({'exp_date': f'{mydate}'}).sort('data_date', pymongo.ASCENDING)
+        data = vesto_col.find({"exp_date": f"{mydate}"}).sort(
+            "data_date", pymongo.ASCENDING
+        )
 
-        legend = 'isect for %s' % mydate
+        legend = "isect for %s" % mydate
         isect = []
         times = []
         ctop = []
         ptop = []
         for d in data:
-            times.append(d['data_date'])
-            isect.append(d['intersection'][0])
-            ctop.append(d['ctop'][1])
-            ptop.append(d['ptop'][1])
+            times.append(d["data_date"])
+            isect.append(d["intersection"][0])
+            ctop.append(d["ctop"][1])
+            ptop.append(d["ptop"][1])
 
-        mystr = f'{len(times)}, {len(isect)}, {len(ctop)}, {len(ptop)}'
+        mystr = f"{len(times)}, {len(isect)}, {len(ctop)}, {len(ptop)}"
 
-        return render_template('line_chart.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times,
-                               legend=legend, processed_text=mystr)
+        return render_template(
+            "line_chart.html",
+            values=isect,
+            values_ctop=ctop,
+            values_ptop=ptop,
+            labels=times,
+            legend=legend,
+            processed_text=mystr,
+        )
 
     @app.route("/lcc")
     def lcc2():
-
-        client = MongoClient(host=app.config['HOST'],
-                             port=27017,
-                             username=app.config['USER'],
-                             password=app.config['PASSWORD'],
-                             tls=True,
-                             tlsAllowInvalidCertificates=True,
-                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
-                             )
+        client = MongoClient(
+            host=app.config["HOST"],
+            port=27017,
+            username=app.config["USER"],
+            password=app.config["PASSWORD"],
+            tls=True,
+            tlsAllowInvalidCertificates=True,
+            tlsCAFile="/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem",
+        )
         db = client.vesto
         vesto_col = db.vesto
 
-        expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')
-        data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.ASCENDING)
+        expdate = datetime.datetime.now(
+            timezone(datetime.timedelta(hours=-5), "EST")
+        ).strftime("%Y-%m-%d")
+        data = vesto_col.find({"exp_date": f"{expdate}"}).sort(
+            "data_date", pymongo.ASCENDING
+        )
 
-        legend = 'ctop / ptop for %s' % expdate
+        legend = "ctop / ptop for %s" % expdate
         isect = []
         times = []
         ctop = []
         ptop = []
         for d in data:
-            times.append(d['data_date'])
-            isect.append(d['intersection'][0])
-            ctop.append(d['ctop'][1])
-            ptop.append(d['ptop'][1])
+            times.append(d["data_date"])
+            isect.append(d["intersection"][0])
+            ctop.append(d["ctop"][1])
+            ptop.append(d["ptop"][1])
 
-        return render_template('line_chart_two.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times,
-                               legend=legend)
+        return render_template(
+            "line_chart_two.html",
+            values=isect,
+            values_ctop=ctop,
+            values_ptop=ptop,
+            labels=times,
+            legend=legend,
+        )
 
     @app.route("/lcc2")
     def lcc():
-
-        client = MongoClient(host=app.config['HOST'],
-                             port=27017,
-                             username=app.config['USER'],
-                             password=app.config['PASSWORD'],
-                             tls=True,
-                             tlsAllowInvalidCertificates=True,
-                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
-                             )
+        client = MongoClient(
+            host=app.config["HOST"],
+            port=27017,
+            username=app.config["USER"],
+            password=app.config["PASSWORD"],
+            tls=True,
+            tlsAllowInvalidCertificates=True,
+            tlsCAFile="/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem",
+        )
         db = client.vesto
         vesto_col = db.vesto
 
-        expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST'))
-
+        expdate = datetime.datetime.now(timezone(datetime.timedelta(hours=-5), "EST"))
 
         days_to_add = 1
 
@@ -328,78 +384,95 @@ def create_app(test_config=None):
             days_to_add = 2
 
         expdate = expdate + datetime.timedelta(days_to_add)
-        expdate = expdate.strftime('%Y-%m-%d')
+        expdate = expdate.strftime("%Y-%m-%d")
 
+        data = vesto_col.find({"exp_date": f"{expdate}"}).sort(
+            "data_date", pymongo.ASCENDING
+        )
 
-        data = vesto_col.find({'exp_date': f'{expdate}'}).sort('data_date', pymongo.ASCENDING)
-
-        legend = 'ctop / ptop for %s' % expdate
+        legend = "ctop / ptop for %s" % expdate
         isect = []
         times = []
         ctop = []
         ptop = []
         for d in data:
-            times.append(d['data_date'])
-            isect.append(d['intersection'][0])
-            ctop.append(d['ctop'][1])
-            ptop.append(d['ptop'][1])
+            times.append(d["data_date"])
+            isect.append(d["intersection"][0])
+            ctop.append(d["ctop"][1])
+            ptop.append(d["ptop"][1])
 
-        return render_template('line_chart_two.html', values=isect, values_ctop=ctop, values_ptop=ptop, labels=times,
-                               legend=legend)
+        return render_template(
+            "line_chart_two.html",
+            values=isect,
+            values_ctop=ctop,
+            values_ptop=ptop,
+            labels=times,
+            legend=legend,
+        )
 
-    @app.route('/lcc3')
-    @app.route('/lcc3/<mydate>')
-    def lcc3(mydate=datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')):
-
-        client = MongoClient(host=app.config['HOST'],
-                             port=27017,
-                             username=app.config['USER'],
-                             password=app.config['PASSWORD'],
-                             tls=True,
-                             tlsAllowInvalidCertificates=True,
-                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
-                             )
+    @app.route("/lcc3")
+    @app.route("/lcc3/<mydate>")
+    def lcc3(
+        mydate=datetime.datetime.now(
+            timezone(datetime.timedelta(hours=-5), "EST")
+        ).strftime("%Y-%m-%d")
+    ):
+        client = MongoClient(
+            host=app.config["HOST"],
+            port=27017,
+            username=app.config["USER"],
+            password=app.config["PASSWORD"],
+            tls=True,
+            tlsAllowInvalidCertificates=True,
+            tlsCAFile="/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem",
+        )
         db = client.vesto
         vesto_col = db.vesto
 
-        data = vesto_col.find({'exp_date': f'{mydate}'}).sort('data_date', pymongo.ASCENDING)
+        data = vesto_col.find({"exp_date": f"{mydate}"}).sort(
+            "data_date", pymongo.ASCENDING
+        )
 
         isect = []
         times = []
         ctop = []
         ptop = []
         for d in data:
-            times.append(d['data_date'])
-            isect.append(d['intersection'][0])
-            ctop.append(d['ctop'][1])
-            ptop.append(d['ptop'][1])
-
-
+            times.append(d["data_date"])
+            isect.append(d["intersection"][0])
+            ctop.append(d["ctop"][1])
+            ptop.append(d["ptop"][1])
 
         # Return the components to the HTML template
         return render_template(
-            template_name_or_list='new_line_chart.html',
+            template_name_or_list="new_line_chart.html",
             ctop=ctop,
             ptop=ptop,
             labels=times,
         )
 
-    @app.route('/lcc4')
-    @app.route('/lcc4/<mydate>')
-    def lcc4(mydate=datetime.datetime.now(timezone(datetime.timedelta(hours=-5), 'EST')).strftime('%Y-%m-%d')):
-
-        client = MongoClient(host=app.config['HOST'],
-                             port=27017,
-                             username=app.config['USER'],
-                             password=app.config['PASSWORD'],
-                             tls=True,
-                             tlsAllowInvalidCertificates=True,
-                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
-                             )
+    @app.route("/lcc4")
+    @app.route("/lcc4/<mydate>")
+    def lcc4(
+        mydate=datetime.datetime.now(
+            timezone(datetime.timedelta(hours=-5), "EST")
+        ).strftime("%Y-%m-%d")
+    ):
+        client = MongoClient(
+            host=app.config["HOST"],
+            port=27017,
+            username=app.config["USER"],
+            password=app.config["PASSWORD"],
+            tls=True,
+            tlsAllowInvalidCertificates=True,
+            tlsCAFile="/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem",
+        )
         db = client.vesto
         vesto_col = db.vesto
 
-        data = vesto_col.find({'exp_date': f'{mydate}', 'version': 2}).sort('data_date', pymongo.ASCENDING)
+        data = vesto_col.find({"exp_date": f"{mydate}", "version": 2}).sort(
+            "data_date", pymongo.ASCENDING
+        )
 
         isect = []
         times = []
@@ -424,42 +497,40 @@ def create_app(test_config=None):
         ptheta = []
         piv = []
 
-
-
         delta = []
         gamma = []
         for d in data:
-            times.append(d['data_date'])
-            isect.append(d['intersection'][0])
-            ctop.append(d['ctop'][1])
-            ptop.append(d['ptop'][1])
+            times.append(d["data_date"])
+            isect.append(d["intersection"][0])
+            ctop.append(d["ctop"][1])
+            ptop.append(d["ptop"][1])
 
-            cprice.append(d['price_sum_call'])
-            coi.append(d['oi_sum_call'])
-            cvol.append(d['vol_sum_call'])
-            cdelta.append(d['delta_sum_call'])
-            cgamma.append(d['gamma_sum_call'])
-            cvega.append(d['vega_avg_call'])
-            ctheta.append(d['theta_avg_call'])
-            civ.append(d['iv_avg_call'])
+            cprice.append(d["price_sum_call"])
+            coi.append(d["oi_sum_call"])
+            cvol.append(d["vol_sum_call"])
+            cdelta.append(d["delta_sum_call"])
+            cgamma.append(d["gamma_sum_call"])
+            cvega.append(d["vega_avg_call"])
+            ctheta.append(d["theta_avg_call"])
+            civ.append(d["iv_avg_call"])
 
-            pprice.append(d['price_sum_put'])
-            poi.append(d['oi_sum_put'])
-            pvol.append(d['vol_sum_put'])
-            pdelta.append(d['delta_sum_put'])
-            pgamma.append(d['gamma_sum_put'])
-            pvega.append(d['vega_avg_put'])
-            ptheta.append(d['theta_avg_put'])
-            piv.append(d['iv_avg_put'])
+            pprice.append(d["price_sum_put"])
+            poi.append(d["oi_sum_put"])
+            pvol.append(d["vol_sum_put"])
+            pdelta.append(d["delta_sum_put"])
+            pgamma.append(d["gamma_sum_put"])
+            pvega.append(d["vega_avg_put"])
+            ptheta.append(d["theta_avg_put"])
+            piv.append(d["iv_avg_put"])
 
-            delta.append(d['delta_sum_call'] + d['delta_sum_put'])
-            gamma.append(d['gamma_sum_call'] + d['gamma_sum_put'])
+            delta.append(d["delta_sum_call"] + d["delta_sum_put"])
+            gamma.append(d["gamma_sum_call"] + d["gamma_sum_put"])
 
-        title = f'{mydate}'
+        title = f"{mydate}"
 
         # Return the components to the HTML template
         return render_template(
-            template_name_or_list='new_new_line_chart.html',
+            template_name_or_list="new_new_line_chart.html",
             ctop=ctop,
             ptop=ptop,
             isect=isect,
@@ -485,32 +556,31 @@ def create_app(test_config=None):
             gamma=gamma,
         )
 
-    @app.route('/lcc5/<mydate>/<sprice>')
+    @app.route("/lcc5/<mydate>/<sprice>")
     def lcc5(mydate, sprice):
-
-        client = MongoClient(host=app.config['HOST'],
-                             port=27017,
-                             username=app.config['USER'],
-                             password=app.config['PASSWORD'],
-                             tls=True,
-                             tlsAllowInvalidCertificates=True,
-                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
-                             )
+        client = MongoClient(
+            host=app.config["HOST"],
+            port=27017,
+            username=app.config["USER"],
+            password=app.config["PASSWORD"],
+            tls=True,
+            tlsAllowInvalidCertificates=True,
+            tlsCAFile="/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem",
+        )
         db = client.vesto
         vesto_col = db.vesto
 
-
-    @app.route('/prices', methods=['GET', 'POST'])
+    @app.route("/prices", methods=["GET", "POST"])
     def prices():
-
-        client = MongoClient(host=app.config['HOST'],
-                             port=27017,
-                             username=app.config['USER'],
-                             password=app.config['PASSWORD'],
-                             tls=True,
-                             tlsAllowInvalidCertificates=True,
-                             tlsCAFile='/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem',
-                             )
+        client = MongoClient(
+            host=app.config["HOST"],
+            port=27017,
+            username=app.config["USER"],
+            password=app.config["PASSWORD"],
+            tls=True,
+            tlsAllowInvalidCertificates=True,
+            tlsCAFile="/home/ec2-user/ptrack/ptrack/rds-combined-ca-bundle.pem",
+        )
         db = client.vesto
         prices_col = db.prices
 
@@ -532,18 +602,21 @@ def create_app(test_config=None):
         except Exception as e:
             pass
 
-
-        return render_template("index.html", user_image="static/jpuff.png",
-                               processed_text=inserted_id)
+        return render_template(
+            "index.html", user_image="static/jpuff.png", processed_text=inserted_id
+        )
 
     from . import db
+
     db.init_app(app)
 
     from . import auth
+
     app.register_blueprint(auth.bp)
 
     from . import item
+
     app.register_blueprint(item.bp)
-    app.add_url_rule('/', endpoint='index')
+    app.add_url_rule("/", endpoint="index")
 
     return app
